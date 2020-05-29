@@ -1,0 +1,252 @@
+---
+title: "FMG Stand Walk Summary Sheet"
+output:
+  pdf_document: default
+  html_document:
+    css: style_1.css
+---
+
+```{r get_data, echo=FALSE}
+# collector
+forester <- " ______________________________ "
+date <- "______/______/______"
+
+# stand_id
+pool        <- "Pool 13"
+compartment <- "c0078"
+unit        <- "U0124"
+site        <- "T0987"
+stand       <- "S0001"
+num_plots      <- 25
+num_age_plots  <- 5
+walk_acres     <- 5.7
+inventory_year <- 2011
+dom_soil_type  <- "Grafton Silty Loam"
+
+# stand-summary-data
+tpa              <- 85
+basal_area       <- 300
+qm_dbh           <- 4.7
+stocking         <- 55
+canopy_height    <- 120
+canopy_closure   <- 0.80
+hard_mast_tpa    <- 15
+hard_mast_ba     <- 37
+hard_mast_qm_dbh <- 118
+hard_mast_stock  <- 134
+under_height     <- 22
+snag_tpa         <- 2
+stand_age        <- 72
+hard_mast_age    <- 85
+growth           <- 23
+stand_health     <- 56
+species_rich     <- 1.2
+regen_rate       <- 33
+```
+
+## Stand ID
+
+::::: {#collector .grid-10w-1h }
+::: {.var-name}
+Forester
+:::
+::: {.var-value}
+`r forester`
+:::
+::: {.var-name}
+Date
+:::
+::: {.var-value}
+`r date`
+:::
+:::::
+
+::::: {#stand_id .grid-10w-2h}
+::: {.var-name}
+Pool
+:::
+::: {.var-value}
+`r pool`
+:::
+::: {.var-name}
+Compartment
+:::
+::: {.var-value}
+`r compartment`
+:::
+::: {.var-name}
+Unit
+:::
+::: {.var-value}
+`r unit`
+:::
+::: {.var-name}
+Site 
+:::
+::: {.var-value}
+`r site`
+:::
+::: {.var-name}
+Stand 
+:::
+::: {.var-value}
+`r stand`
+:::
+::: {.var-name}
+\# of Plots
+:::
+::: {.var-value}
+`r num_plots`
+:::
+::: {.var-name}
+\# Age Plots
+:::
+::: {.var-value}
+`r num_age_plots`
+:::
+::: {.var-name}
+Walk Acreage
+:::
+::: {.var-value}
+`r walk_acres`
+:::
+::: {.var-name}
+Inventory Year
+:::
+::: {.var-value}
+`r inventory_year`
+:::
+::: {.var-name}
+Dominant Soil Type
+:::
+::: {.var-value}
+`r dom_soil_type`
+:::
+:::::
+
+## Stand Summary Data
+
+::::: {#stand-summary-data .grid-6w-6h}
+::: {.var-name}
+Trees per Acre
+:::
+::: {.var-value}
+`r tpa`
+:::
+::: {.var-name}
+Hard Mast TPA
+:::
+::: {.var-value}
+`r hard_mast_tpa`
+:::
+::: {.var-name}
+Stand Age
+:::
+::: {.var-value}
+`r stand_age`
+:::
+::: {.var-name}
+Basal Area
+:::
+::: {.var-value}
+`r basal_area`
+:::
+::: {.var-name}
+Hard Mast BA
+:::
+::: {.var-value}
+`r hard_mast_ba`
+:::
+::: {.var-name}
+Hard Mast Age
+:::
+::: {.var-value}
+`r hard_mast_age`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r qm_dbh`
+:::
+::: {.var-name}
+Hard Mast QM DBH
+:::
+::: {.var-value}
+`r hard_mast_qm_dbh`
+:::
+::: {.var-name}
+Growth
+:::
+::: {.var-value}
+`r growth`
+:::
+::: {.var-name}
+Stocking
+:::
+::: {.var-value}
+`r stocking`
+:::
+::: {.var-name}
+Hard Mast Stocking
+:::
+::: {.var-value}
+`r hard_mast_stock`
+:::
+::: {.var-name}
+Stand Health
+:::
+::: {.var-value}
+`r stand_health`
+:::
+::: {.var-name}
+Canopy Height
+:::
+::: {.var-value}
+`r canopy_height`
+:::
+::: {.var-name}
+Understory Height
+:::
+::: {.var-value}
+`r under_height`
+:::
+::: {.var-name}
+Species Richness
+:::
+::: {.var-value}
+`r species_rich`
+:::
+::: {.var-name}
+Canopy Closure
+::: 
+::: {.var-value}
+`r canopy_closure`
+:::
+::: {.var-name}
+Snag TPA
+:::
+::: {.var-value}
+`r snag_tpa`
+:::
+::: {.var-name}
+Regeneration Rate
+:::
+::: {.var-value}
+`r regen_rate`
+:::
+:::::
+
+## Section 3
+
+::::: {#section-3 .group-3}
+::: {.box}
+### Size Class Distribution (TPA)
+:::
+::: {.box}
+### Top 3 Understory Species
+:::
+::: {.box}
+### Top 3 Ground Species
+:::
+:::::
