@@ -1,5 +1,5 @@
 # FMG-StandWalk
-Creates an Forest Management Geodatabase (FMG) Stand Walk Report. 
+Creates a Forest Management Geodatabase (FMG) Stand Walk Report. 
 
 The purpose of this report is to automate the production of the reports needed by foresters to conduct the "Stand Walk Recon" task. The purpose of a Stand Walk Recon is to assess the current condition of a given forest stand using the forest survey data recorded in the FMG, and from this information, to develop a "Stand Perscription" that will define its management in the coming years. 
 
