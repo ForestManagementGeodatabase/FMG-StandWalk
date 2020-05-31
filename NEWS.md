@@ -1,0 +1,6 @@
+# Updates 05/31/2020
+
+* Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN. 
+* This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
+* For `.html` output, this report uses the `.css` `grid` framework to define the layout the report. 
+* For `.pdf` output, this report does not currently contain any `.tex` code to style the report. To support `.pdf` output, this would require an entirely seperate codebase in `.tex` format to mimic the current `.css`-based report layout. Therefore during development, it is recommended to only support the `.html` ouput version at least until development of th report has matured. Once the report format has matured, a `.pdf` version can be developed to prevent unnecessary duplication of effort. 
