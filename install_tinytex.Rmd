@@ -1,0 +1,20 @@
+---
+title: "Install Tinytex"
+output: html_document
+---
+
+The tinytex R package cannot install TinyTex (the minimal TexLive distribution) under users who do not have administrative rights on their computer. Follow these steps to install TinyTex under your user account. 
+
+```{r}
+library(RCurl)
+
+```
+
+
+
+```{r}
+tinytex_zip_url <- "https://ci.appveyor.com/api/projects/yihui/tinytex/artifacts/TinyTeX.zip"
+
+temp_file <- tempfile()
+download.file(tinytex_zip_url, temp_file)
+```
