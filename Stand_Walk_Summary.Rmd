@@ -8,8 +8,8 @@ output:
 
 ```{r get_data, echo=FALSE}
 # collector
-forester <- " ______________________________ "
-date <- "______/______/______"
+forester <- ""
+date <- ""
 
 # stand_id
 pool        <- "Pool 13"
@@ -42,26 +42,76 @@ growth           <- 23
 stand_health     <- 56
 species_rich     <- 1.2
 regen_rate       <- 33
+
+# Size Class Distribution (TPA)
+polesize   <- 45
+sawtimber  <- 68
+mature     <- 89
+overmature <- 27
+
+# Top 3 Understory Species
+under_species_1 <- "FRMW"
+under_species_2 <- "HTXR"
+under_species_3 <- "DRPT"
+
+# Top 3 Ground Species
+ground_species_1 <- "AWQC"
+ground_species_2 <- "KLOR"
+ground_species_3 <- "NWPT"
+
+# Top 5 Overstory Species
+o1_usda_code  <- "ACGR"
+o1_avg_tpa    <- 126
+o1_avg_ba     <- 35
+o1_qm_dbh     <- 14
+o1_target_tpa <- 110
+o1_target_ba  <- 19
+o2_usda_code  <- "WSTR"
+o2_avg_tpa    <- 126
+o2_avg_ba     <- 35
+o2_qm_dbh     <- 14
+o2_target_tpa <- 110
+o2_target_ba  <- 19
+o3_usda_code  <- "FAPT"
+o3_avg_tpa    <- 126
+o3_avg_ba     <- 35
+o3_qm_dbh     <- 14
+o3_target_tpa <- 110
+o3_target_ba  <- 19
+o4_usda_code  <- "BRHT"
+o4_avg_tpa    <- 126
+o4_avg_ba     <- 35
+o4_qm_dbh     <- 14
+o4_target_tpa <- 110
+o4_target_ba  <- 19
+o5_usda_code  <- "QRRB"
+o5_avg_tpa    <- 126
+o5_avg_ba     <- 35
+o5_qm_dbh     <- 14
+o5_target_tpa <- 110
+o5_target_ba  <- 19
 ```
 
+<!--
 ## Stand ID
+-->
 
-::::: {#collector .grid-10w-1h }
+::::: {#collector .grid-5w-1h }
 ::: {.var-name}
 Forester
 :::
-::: {.var-value}
+::: {.empty-box}
 `r forester`
 :::
 ::: {.var-name}
 Date
 :::
-::: {.var-value}
+::: {.empty-box}
 `r date`
 :::
 :::::
 
-::::: {#stand_id .grid-10w-2h}
+::::: {#stand_id_1 .grid-5w-2h}
 ::: {.var-name}
 Pool
 :::
@@ -92,6 +142,9 @@ Stand
 ::: {.var-value}
 `r stand`
 :::
+:::::
+
+::::: {#stand_id_2 .grid-5w-2h}
 ::: {.var-name}
 \# of Plots
 :::
@@ -123,6 +176,8 @@ Dominant Soil Type
 `r dom_soil_type`
 :::
 :::::
+
+
 
 ## Stand Summary Data
 
@@ -237,16 +292,311 @@ Regeneration Rate
 :::
 :::::
 
-## Section 3
 
-::::: {#section-3 .group-3}
-::: {.box}
+<!--
+## Section 3
+-->
+
+:::::::::::: {#section-3 .group-3-horz}
+:::::::: {.section-box}
 ### Size Class Distribution (TPA)
+
+::::: {.grid-2w-4h}
+::: {.var-name}
+Polesize (8"-12")
 :::
-::: {.box}
-### Top 3 Understory Species
+::: {.var-value}
+`r polesize`
 :::
-::: {.box}
-### Top 3 Ground Species
+::: {.var-name}
+Sawtimber (12"-18")
+:::
+::: {.var-value}
+`r sawtimber`
+:::
+::: {.var-name}
+Mature (18"-24")
+:::
+::: {.var-value}
+`r mature`
+:::
+::: {.var-name}
+Overmature (24"+)
+:::
+::: {.var-value}
+`r overmature`
 :::
 :::::
+::::::::
+:::::::: {.section-box}
+### Top 3 Understory Species
+
+::::: {.grid-2w-4h}
+::: {.var-name}
+Species 1
+:::
+::: {.var-value}
+`r under_species_1`
+:::
+::: {.var-name}
+Species 2
+:::
+::: {.var-value}
+`r under_species_2`
+:::
+::: {.var-name}
+Species 3
+:::
+::: {.var-value}
+`r under_species_3`
+:::
+:::::
+::::::::
+:::::::: {.section-box}
+### Top 3 Ground Species
+
+::::: {.grid-2w-4h}
+::: {.var-name}
+Species 1
+:::
+::: {.var-value}
+`r ground_species_1`
+:::
+::: {.var-name}
+Species 2
+:::
+::: {.var-value}
+`r ground_species_2`
+:::
+::: {.var-name}
+Species 3
+:::
+::: {.var-value}
+`r ground_species_3`
+:::
+:::::
+::::::::
+::::::::::::
+
+
+
+<!--
+## Section 4
+-->
+
+:::::::::::: {#section-4 .group-5-vert}
+### Top 5 Overstory Species
+
+<!-- Overstory Species 1 -->
+:::::::: {.section-box}
+::::: {.grid-6w-2h}
+::: {.var-name}
+USDA Code
+:::
+::: {.var-value}
+`r o1_usda_code`
+:::
+::: {.var-name}
+Avg. TPA
+:::
+::: {.var-value}
+`r o1_avg_tpa`
+:::
+::: {.var-name}
+Avg. BA
+:::
+::: {.var-value}
+`r o1_avg_ba`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r o1_qm_dbh`
+:::
+::: {.var-name}
+Target TPA
+:::
+::: {.var-value}
+`r o1_target_tpa`
+:::
+::: {.var-name}
+Target BA
+:::
+::: {.var-value}
+`r o1_target_ba`
+:::
+:::::
+::::::::
+
+<!-- Overstory Species 2 -->
+:::::::: {.section-box}
+::::: {.grid-6w-2h}
+::: {.var-name}
+USDA Code
+:::
+::: {.var-value}
+`r o2_usda_code`
+:::
+::: {.var-name}
+Avg. TPA
+:::
+::: {.var-value}
+`r o2_avg_tpa`
+:::
+::: {.var-name}
+Avg. BA
+:::
+::: {.var-value}
+`r o2_avg_ba`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r o2_qm_dbh`
+:::
+::: {.var-name}
+Target TPA
+:::
+::: {.var-value}
+`r o2_target_tpa`
+:::
+::: {.var-name}
+Target BA
+:::
+::: {.var-value}
+`r o2_target_ba`
+:::
+:::::
+::::::::
+
+<!-- Overstory Species 3 -->
+:::::::: {.section-box}
+::::: {.grid-6w-2h}
+::: {.var-name}
+USDA Code
+:::
+::: {.var-value}
+`r o3_usda_code`
+:::
+::: {.var-name}
+Avg. TPA
+:::
+::: {.var-value}
+`r o3_avg_tpa`
+:::
+::: {.var-name}
+Avg. BA
+:::
+::: {.var-value}
+`r o3_avg_ba`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r o3_qm_dbh`
+:::
+::: {.var-name}
+Target TPA
+:::
+::: {.var-value}
+`r o3_target_tpa`
+:::
+::: {.var-name}
+Target BA
+:::
+::: {.var-value}
+`r o3_target_ba`
+:::
+:::::
+::::::::
+
+<!-- Overstory Species 4 -->
+:::::::: {.section-box}
+::::: {.grid-6w-2h}
+::: {.var-name}
+USDA Code
+:::
+::: {.var-value}
+`r o4_usda_code`
+:::
+::: {.var-name}
+Avg. TPA
+:::
+::: {.var-value}
+`r o4_avg_tpa`
+:::
+::: {.var-name}
+Avg. BA
+:::
+::: {.var-value}
+`r o4_avg_ba`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r o4_qm_dbh`
+:::
+::: {.var-name}
+Target TPA
+:::
+::: {.var-value}
+`r o4_target_tpa`
+:::
+::: {.var-name}
+Target BA
+:::
+::: {.var-value}
+`r o4_target_ba`
+:::
+:::::
+::::::::
+
+<!-- Overstory Species 5 -->
+:::::::: {.section-box}
+::::: {.grid-6w-2h}
+::: {.var-name}
+USDA Code
+:::
+::: {.var-value}
+`r o5_usda_code`
+:::
+::: {.var-name}
+Avg. TPA
+:::
+::: {.var-value}
+`r o5_avg_tpa`
+:::
+::: {.var-name}
+Avg. BA
+:::
+::: {.var-value}
+`r o5_avg_ba`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r o5_qm_dbh`
+:::
+::: {.var-name}
+Target TPA
+:::
+::: {.var-value}
+`r o5_target_tpa`
+:::
+::: {.var-name}
+Target BA
+:::
+::: {.var-value}
+`r o5_target_ba`
+:::
+:::::
+::::::::
+
+::::::::::::
+
+
