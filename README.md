@@ -8,6 +8,9 @@ The "Stand Walk Recon" task is composed of two elements:
 * **Stand Summay** - A sheet summarizing the FMG field survey data for a given stand. Foresters need to consult the summary statistics on this sheet to help record decisions on the next sheet. 
 * **Stand Perscription** - A sheet used by a forester to record their assessment of what management actions should be taken for a given stand. 
 
+## Funding
+Funding for the development and maintenance of the Forest Management Geodatabase (FMG) has been provided by USACE Rock Island District, Operations Division, Mississippi River Project, Natural Resources. 
+
 ## Authors
 * [Michael Dougherty](mailto:Michael.P.Dougherty@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
 * [Chris Hawes](mailto:Christopher.C.Hawes@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
