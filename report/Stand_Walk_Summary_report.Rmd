@@ -3,6 +3,8 @@ title: "FMG Stand Walk Summary Sheet"
 output:
   html_document:
     css: style_1.css
+params:
+  stand_id: 
 ---
 
 ```{r get_data, echo=FALSE}
