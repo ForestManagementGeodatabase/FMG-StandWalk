@@ -1,0 +1,21 @@
+---
+title: "FMG Stand Summary List"
+output:
+  html_document:
+params:
+  report_files:              # list of .html files
+---
+
+Click on the links below to view the Stand Walk Reports:
+
+```{r report_list, echo=FALSE, results="asis"}
+template <- "[%s](%s)  
+"
+
+for (i in report_files) {
+  link_text <- substr(basename(i), 15, 29)
+  
+  cat(sprintf(template, link_text, basename(i)))
+}
+```
+
