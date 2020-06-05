@@ -14,6 +14,8 @@ params:
 ---
 
 ```{r get_data, echo=FALSE}
+report_version <- "0.1.1"
+
 library(dplyr)
 
 # Get the species-mast type table
@@ -700,4 +702,4 @@ Target BA
 
 ::::::::::::
 
-
+report version: `r report_version`
