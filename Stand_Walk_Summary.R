@@ -9,10 +9,6 @@
 #'                               table.
 #' @param species_summary_tbl    .gdb table; A FMG species summary table.
 #' @param health_summary_tbl     .gdb table; A FMG Health summary table.
-#' @param imp_stand_summary_tbl  .gdb table; A FMG stand importance summary 
-#'                               table.
-#' @param imp_plot_summary_tbl   .gdb table; A FMG plot importance summary 
-#'                               table.
 #'                               
 #' @details  This tool creates a folder named `reports` in the folder where the 
 #' `stand_summary_tbl` is located. A Stand Walk Summary Report is written into 
@@ -36,9 +32,7 @@ tool_exec <- function(in_params, out_params) {
   age_fixed_summary_tbl     <- in_params[[2]]
   species_summary_tbl       <- in_params[[3]]
   health_summary_tbl        <- in_params[[4]]
-  imp_stand_summary_tbl     <- in_params[[5]]
-  imp_plot_summary_tbl      <- in_params[[6]]
-  
+
   # Code for testing in RStudio
   # library(sf)
   # dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
@@ -46,17 +40,13 @@ tool_exec <- function(in_params, out_params) {
   # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Age_Fixed_Sum"
   # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Species_Sum"
   # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Health_Sum"
-  # imp_stand_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Importance_Stand_Sum"
-  # imp_plot_summary_tbl      <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Importance_Sum"
   # in_params <- list(stand_summary_tbl, age_fixed_summary_tbl, 
-  #                   species_summary_tbl, health_summary_tbl, 
-  #                   imp_stand_summary_tbl, imp_plot_summary_tbl)
+  #                   species_summary_tbl, health_summary_tbl)
 
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
   param_list <- tibble::lst(stand_summary_tbl, age_fixed_summary_tbl, 
-                            species_summary_tbl, health_summary_tbl, 
-                            imp_stand_summary_tbl, imp_plot_summary_tbl)
+                            species_summary_tbl, health_summary_tbl)
   
   ## Get parameter verification table
   message("Compare input tool parameters")
@@ -79,11 +69,7 @@ tool_exec <- function(in_params, out_params) {
                                layer = basename(species_summary_tbl))
   health_summary    <- sf::read_sf(dsn = gdb,
                                    layer = basename(health_summary_tbl))
-  imp_stand_summary <- sf::read_sf(dsn = gdb,
-                                   layer = basename(imp_stand_summary_tbl))
-  imp_plot_summary  <- sf::read_sf(dsn = gdb,
-                                   layer = basename(imp_plot_summary_tbl))
-  
+
   # Get a list of stand_ids from the stand_summary_tbl
   stand_vector <- stand_summary$SITE_NEW
   
@@ -107,9 +93,7 @@ tool_exec <- function(in_params, out_params) {
                           "age_fixed_summary" = age_fixed_summary,
                           "stand_summary" = stand_summary,
                           "species_summary" = species_summary,
-                          "health_summary" = health_summary,
-                          "imp_stand_summary" = imp_stand_summary,
-                          "imp_plot_summary" = imp_plot_summary)
+                          "health_summary" = health_summary)
     report_template <- file.path(dir_name, "report", 
                                  "Stand_Walk_Summary_report.Rmd")
     
