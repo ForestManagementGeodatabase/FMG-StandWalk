@@ -145,10 +145,10 @@ species_rich     <- species_richness
 regen_rate       <- floor(age_fixed_st$UND_COV)
 
 # Size Class Distribution (TPA)
-polesize   <- stand_st$POL_TPA
-sawtimber  <- stand_st$SAW_TPA
-mature     <- stand_st$MAT_TPA
-overmature <- stand_st$OVM_TPA
+polesize         <- floor(stand_st$POL_TPA)
+sawtimber        <- floor(stand_st$SAW_TPA)
+mature           <- floor(stand_st$MAT_TPA)
+overmature       <- floor(stand_st$OVM_TPA)
 
 # Top 3 Understory Species
 under_species_1 <- NA
