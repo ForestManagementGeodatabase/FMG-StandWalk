@@ -1,5 +1,5 @@
 ---
-title: "FMG Stand Walk Summary Sheet"
+title: "FMG Stand Summary"
 output:
   html_document:
     css: style_1.css
@@ -15,22 +15,25 @@ params:
 
 ```{r get_data, echo=FALSE}
 library(dplyr)
-library(tibble)
 
 # Get the species-mast type table
-dir_name <- getSrcDirectory(function(x) {x})
-fmg_data <- file.path(dir_name, "data")
-spp_masttype <- read.csv("SppMastType.csv")
+fmg_dir <- ".."
+fmg_data <- file.path(fmg_dir, "data")
+spp_masttype_file <- file.path(fmg_data, "SppMastType.csv")
+spp_masttype <- read.csv(spp_masttype_file)
+```
 
+```{r test_data, echo=FALSE}
 # For testing (cannot use the variable name `params` as it is controlled by the IDE)
-# params <- list("stand_id" = stand_id, 
-#                 "age_fixed_summary" = age_fixed_summary, 
-#                 "stand_summary" = stand_summary, 
+# params <- list("stand_id" = stand_id,
+#                 "age_fixed_summary" = age_fixed_summary,
+#                 "stand_summary" = stand_summary,
 #                 'species_summary' = species_summary,
 #                 "health_summary" = health_summary,
 #                 "imp_stand_summary" = imp_stand_summary,
 #                 "imp_plot_summary" = imp_plot_summary)
 ```
+
 
 ```{r select_stand, echo=FALSE}
 # Filter for the current stand
@@ -67,12 +70,40 @@ hard_mast_spp <- dplyr::filter(spp_masttype, MAST_TYPE == "HARD")
 
 ## Filter species_st for only hard mast species
 species_hard_mast <- dplyr::filter(species_st, TR_SP %in% hard_mast_spp$TR_SP)
+
+# Calculate hard mast QM_DBH
+hard_mast_BA_TPA <- (sum(species_hard_mast$AV_BA)/sum(species_hard_mast$AV_TPA))
+hard_mast_QM_DBH <- sqrt(hard_mast_BA_TPA/0.005454154)
+
+# Count of hard mast species
+hard_mast_spp_count <- length(species_hard_mast$TR_SP)
 ```
 
 
 ```{r species_richness, echo=FALSE}
 # Calculate species richness
+## Typical Species
+## Get list of 'typical' species
+typical_spp <- dplyr::filter(spp_masttype, TYPICAL == "COMMON")
 
+## Filter species_st for only 'typical' species
+species_typical <- dplyr::filter(species_st, TR_SP %in% typical_spp$TR_SP)
+
+## Count 'typical' species
+typical_spp_count <- length(species_typical$TR_SP)
+
+## Other Species
+## Get list of 'other' species
+other_spp <- dplyr::filter(spp_masttype, MAST_TYPE != "HARD",
+                                         TYPICAL != "COMMON")
+## Filter species_st for only 'other' species
+species_other <- dplyr::filter(species_st, TR_SP %in% other_spp$TR_SP)
+
+## Count 'typical' species
+other_spp_count <- length(species_other$TR_SP)
+
+## Create "Species Richness" string
+species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_count)
 ```
 
 
@@ -94,24 +125,24 @@ inventory_year <- NA                      # age_fixed_summary? string of years?
 dom_soil_type  <- NA                      # new tool?
 
 # stand-summary-data
-tpa              <- round(stand_st$AV_TPA)
-basal_area       <- round(stand_st$AV_BA)
-qm_dbh           <- round(stand_st$QM_DBH)
+tpa              <- floor(stand_st$AV_TPA)
+basal_area       <- floor(stand_st$AV_BA)
+qm_dbh           <- paste0(floor(stand_st$QM_DBH), '"')
 stocking         <- NA                    # where should this live? stand?
-canopy_height    <- paste0(round(age_fixed_st$OV_HT/5)*5, "'")       # nearest 5
-canopy_closure   <- round(age_fixed_st$OV_CLSR, -1)                  # nearest 10
-hard_mast_tpa    <- round(sum(species_hard_mast$AV_TPA))
-hard_mast_ba     <- round(sum(species_hard_mast$AV_BA))
-hard_mast_qm_dbh <- NA                    
+canopy_height    <- paste0(round(age_fixed_st$OV_HT/5)*5, "'")    # nearest 5 ft
+canopy_closure   <- paste0(round(age_fixed_st$OV_CLSR, -1), "%")  # nearest 10 %
+hard_mast_tpa    <- floor(sum(species_hard_mast$AV_TPA))
+hard_mast_ba     <- floor(sum(species_hard_mast$AV_BA))
+hard_mast_qm_dbh <- paste0(floor(hard_mast_QM_DBH), '"')
 hard_mast_stock  <- NA                    
-under_height     <- round(age_fixed_st$UND_HT, 2)
-snag_tpa         <- round(stand_st$SNAG_TPA)
-stand_age        <- round(age_fixed_st$TR_AGE)
+under_height     <- paste0(round(age_fixed_st$UND_HT, 2), "'")
+snag_tpa         <- floor(stand_st$SNAG_TPA)
+stand_age        <- floor(age_fixed_st$TR_AGE)
 hard_mast_age    <- NA                    
 growth           <- NA                    # where should this live?
 stand_health     <- health_sort[1,]$TR_HLTH
-species_rich     <- NA
-regen_rate       <- round(age_fixed_st$UND_COV)
+species_rich     <- species_richness
+regen_rate       <- floor(age_fixed_st$UND_COV)
 
 # Size Class Distribution (TPA)
 polesize   <- stand_st$POL_TPA
@@ -131,33 +162,33 @@ ground_species_3 <- NA
 
 # Top 5 Overstory Species
 o1_usda_code  <- species_sort[1,]$TR_SP
-o1_avg_tpa    <- round(species_sort[1,]$AV_TPA)
-o1_avg_ba     <- round(species_sort[1,]$AV_BA)
-o1_qm_dbh     <- round(species_sort[1,]$QM_DBH)
-o1_target_tpa <- NA                          # Where these values come from?
+o1_avg_tpa    <- floor(species_sort[1,]$AV_TPA)
+o1_avg_ba     <- floor(species_sort[1,]$AV_BA)
+o1_qm_dbh     <- floor(species_sort[1,]$QM_DBH)
+o1_target_tpa <- NA                          # Where do these values come from?
 o1_target_ba  <- NA
 o2_usda_code  <- species_sort[2,]$TR_SP
-o2_avg_tpa    <- round(species_sort[2,]$AV_TPA)
-o2_avg_ba     <- round(species_sort[2,]$AV_BA)
-o2_qm_dbh     <- round(species_sort[2,]$QM_DBH)
+o2_avg_tpa    <- floor(species_sort[2,]$AV_TPA)
+o2_avg_ba     <- floor(species_sort[2,]$AV_BA)
+o2_qm_dbh     <- floor(species_sort[2,]$QM_DBH)
 o2_target_tpa <- NA
 o2_target_ba  <- NA
 o3_usda_code  <- species_sort[3,]$TR_SP
-o3_avg_tpa    <- round(species_sort[3,]$AV_TPA)
-o3_avg_ba     <- round(species_sort[3,]$AV_BA)
-o3_qm_dbh     <- round(species_sort[3,]$QM_DBH)
+o3_avg_tpa    <- floor(species_sort[3,]$AV_TPA)
+o3_avg_ba     <- floor(species_sort[3,]$AV_BA)
+o3_qm_dbh     <- floor(species_sort[3,]$QM_DBH)
 o3_target_tpa <- NA
 o3_target_ba  <- NA
 o4_usda_code  <- species_sort[4,]$TR_SP
-o4_avg_tpa    <- round(species_sort[4,]$AV_TPA)
-o4_avg_ba     <- round(species_sort[4,]$AV_BA)
-o4_qm_dbh     <- round(species_sort[4,]$QM_DBH)
+o4_avg_tpa    <- floor(species_sort[4,]$AV_TPA)
+o4_avg_ba     <- floor(species_sort[4,]$AV_BA)
+o4_qm_dbh     <- floor(species_sort[4,]$QM_DBH)
 o4_target_tpa <- NA
 o4_target_ba  <- NA
 o5_usda_code  <- species_sort[5,]$TR_SP
-o5_avg_tpa    <- round(species_sort[5,]$AV_TPA)
-o5_avg_ba     <- round(species_sort[5,]$AV_BA)
-o5_qm_dbh     <- round(species_sort[5,]$QM_DBH)
+o5_avg_tpa    <- floor(species_sort[5,]$AV_TPA)
+o5_avg_ba     <- floor(species_sort[5,]$AV_BA)
+o5_qm_dbh     <- floor(species_sort[5,]$QM_DBH)
 o5_target_tpa <- NA
 o5_target_ba  <- NA
 ```
