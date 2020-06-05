@@ -116,8 +116,8 @@ date <- ""
 pool           <- substr(stand_st$SITE_NEW, 1, 3)
 compartment    <- substr(stand_st$SITE_NEW, 4, 7)
 unit           <- substr(stand_st$SITE_NEW, 8, 11)
-site           <- NA                      # Why is Site level missing from SITE_NEW?
-stand          <- substr(stand_st$SITE_NEW, 12, 15)
+site           <- substr(stand_st$SITE_NEW, 12, 15)
+stand          <- substr(stand_st$SITE_NEW, 16, 19)
 num_plots      <- stand_st$NUM_PL
 num_age_plots  <- NA
 walk_acres     <- NA                      # unclear what area being referenced
