@@ -1,58 +1,58 @@
-COMMON_NAME,TR_SP,MAST_TYPE
-box elder,ACNE2,LIGHTSEED
-silver maple,ACSA2,LIGHTSEED
-sugar maple,ACSA3,LIGHTSEED
-ohio buckeye,AEGL,HARD
-river birch,BENI,LIGHTSEED
-mockernut hickory,CAAL27,HARD
-southern catalpa,CABI8,LIGHTSEED
-bitternut hickory,CACO15,HARD
-northerm pecan,CAIL2,HARD
-shellbark hickory,CALA21,HARD
-shagbark hickory,CAOV2,HARD
-hickory spp.,CARYA,HARD
-eastern redbud,CECA4,SOFT
-sugarberry,CELA,SOFT
-hackberry spp.,CELTI,SOFT
-common hackberry,CEOC,SOFT
-common buttonbush,CEOC2,SOFT
-flowering dogwood,COFL2,SOFT
-dogwood spp.,CORNU,SOFT
-hawthorn spp.,CRATA,SOFT
-common persimmon,DIVI5,SOFT
-swamp privet,FOAC,SOFT
-white ash,FRAM2,LIGHTSEED
-green ash,FRPE,LIGHTSEED
-honey locust,GLTR,SOFT
-Kentucky coffeetree,GYDI,SOFT
-possumhaw,ILDE,SOFT
-black walnut,JUNI,HARD
-eastern redcedar,JUVI,SOFT
-sweetgum,LIST2,LIGHTSEED
-Amur honeysuckle,LOMA6,SOFT
-osage orange,MAPO,SOFT
-red mulberry,MORU2,SOFT
-none,NONE,NONE
-other,Other,OTHER
-sycamore,PLOC,LIGHTSEED
-eastern cottonwood,PODE3,LIGHTSEED
-black cherry,PRSE2,SOFT
-white oak,QUAL,HARD
-swamp white oak,QUBI,HARD
-overcup oak,QULY,HARD
-bur oak,QUMA2,HARD
-chinkapin oak,QUMU,HARD
-pin oak,QUPA2,HARD
-red oak,QURU,HARD
-black oak,QUVE,HARD
-black locust,ROPS,SOFT
-sandbar willow,SAIN3,LIGHTSEED
-willow spp.,SALIX,LIGHTSEED
-black willow,SANI,LIGHTSEED
-snag,SNAG,OTHER
-bald cypress,TADI2,OTHER
-American basswood,TIAM,SOFT
-American elm,ULAM,LIGHTSEED
-Siberian elm,ULPU,LIGHTSEED
-red/slipper elm,ULRU,LIGHTSEED
-Unknown,UNKNOWN,OTHER
+COMMON_NAME,TR_SP,MAST_TYPE,TYPICAL
+box elder,ACNE2,LIGHTSEED,UNCOMMON
+silver maple,ACSA2,LIGHTSEED,COMMON
+sugar maple,ACSA3,LIGHTSEED,UNCOMMON
+ohio buckeye,AEGL,HARD,UNCOMMON
+river birch,BENI,LIGHTSEED,UNCOMMON
+mockernut hickory,CAAL27,HARD,UNCOMMON
+southern catalpa,CABI8,LIGHTSEED,UNCOMMON
+bitternut hickory,CACO15,HARD,UNCOMMON
+northerm pecan,CAIL2,HARD,UNCOMMON
+shellbark hickory,CALA21,HARD,UNCOMMON
+shagbark hickory,CAOV2,HARD,UNCOMMON
+hickory spp.,CARYA,HARD,UNCOMMON
+eastern redbud,CECA4,SOFT,UNCOMMON
+sugarberry,CELA,SOFT,UNCOMMON
+hackberry spp.,CELTI,SOFT,UNCOMMON
+common hackberry,CEOC,SOFT,UNCOMMON
+common buttonbush,CEOC2,SOFT,UNCOMMON
+flowering dogwood,COFL2,SOFT,UNCOMMON
+dogwood spp.,CORNU,SOFT,UNCOMMON
+hawthorn spp.,CRATA,SOFT,UNCOMMON
+common persimmon,DIVI5,SOFT,UNCOMMON
+swamp privet,FOAC,SOFT,UNCOMMON
+white ash,FRAM2,LIGHTSEED,UNCOMMON
+green ash,FRPE,LIGHTSEED,COMMON
+honey locust,GLTR,SOFT,UNCOMMON
+Kentucky coffeetree,GYDI,SOFT,UNCOMMON
+possumhaw,ILDE,SOFT,UNCOMMON
+black walnut,JUNI,HARD,UNCOMMON
+eastern redcedar,JUVI,SOFT,UNCOMMON
+sweetgum,LIST2,LIGHTSEED,UNCOMMON
+Amur honeysuckle,LOMA6,SOFT,UNCOMMON
+osage orange,MAPO,SOFT,UNCOMMON
+red mulberry,MORU2,SOFT,COMMON
+none,NONE,NONE,UNCOMMON
+other,Other,OTHER,UNCOMMON
+sycamore,PLOC,LIGHTSEED,UNCOMMON
+eastern cottonwood,PODE3,LIGHTSEED,COMMON
+black cherry,PRSE2,SOFT,UNCOMMON
+white oak,QUAL,HARD,UNCOMMON
+swamp white oak,QUBI,HARD,UNCOMMON
+overcup oak,QULY,HARD,UNCOMMON
+bur oak,QUMA2,HARD,UNCOMMON
+chinkapin oak,QUMU,HARD,UNCOMMON
+pin oak,QUPA2,HARD,UNCOMMON
+red oak,QURU,HARD,UNCOMMON
+black oak,QUVE,HARD,UNCOMMON
+black locust,ROPS,SOFT,UNCOMMON
+sandbar willow,SAIN3,LIGHTSEED,UNCOMMON
+willow spp.,SALIX,LIGHTSEED,UNCOMMON
+black willow,SANI,LIGHTSEED,COMMON
+snag,SNAG,OTHER,UNCOMMON
+bald cypress,TADI2,OTHER,UNCOMMON
+American basswood,TIAM,SOFT,UNCOMMON
+American elm,ULAM,LIGHTSEED,COMMON
+Siberian elm,ULPU,LIGHTSEED,UNCOMMON
+red/slipper elm,ULRU,LIGHTSEED,UNCOMMON
+Unknown,UNKNOWN,OTHER,UNCOMMON
