@@ -9,8 +9,6 @@ params:
   stand_summary:                    # data frame
   species_summary:                  # data frame
   health_summary:                   # data frame
-  imp_stand_summary:                # data frame
-  imp_plot_summary:                 # data frame
 ---
 
 ```{r get_data, echo=FALSE}
@@ -31,9 +29,7 @@ spp_masttype <- read.csv(spp_masttype_file)
 #                 "age_fixed_summary" = age_fixed_summary,
 #                 "stand_summary" = stand_summary,
 #                 'species_summary' = species_summary,
-#                 "health_summary" = health_summary,
-#                 "imp_stand_summary" = imp_stand_summary,
-#                 "imp_plot_summary" = imp_plot_summary)
+#                 "health_summary" = health_summary)
 ```
 
 
