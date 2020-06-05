@@ -216,31 +216,31 @@ Date
 
 ::::: {#stand_id_1 .grid-5w-2h}
 ::: {.var-name}
-Pool
+FMG Pool
 :::
 ::: {.var-value}
 `r pool`
 :::
 ::: {.var-name}
-Compartment
+FMG Compartment
 :::
 ::: {.var-value}
 `r compartment`
 :::
 ::: {.var-name}
-Unit
+FMG Unit
 :::
 ::: {.var-value}
 `r unit`
 :::
 ::: {.var-name}
-Site 
+FMG Site 
 :::
 ::: {.var-value}
 `r site`
 :::
 ::: {.var-name}
-Stand 
+FMG Stand 
 :::
 ::: {.var-value}
 `r stand`
