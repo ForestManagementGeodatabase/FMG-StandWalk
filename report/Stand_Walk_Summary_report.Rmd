@@ -47,8 +47,6 @@ species_st   <- dplyr::filter(params$species_summary,
                               SITE_NEW == params$stand_id)
 health_st    <- dplyr::filter(params$health_summary, 
                               SITE_NEW == params$stand_id)
-imp_st       <- dplyr::filter(params$imp_stand_summary, 
-                              SITE_NEW == params$stand_id)
 ```
 
 ```{r sort_tables, echo=FALSE}
@@ -121,7 +119,7 @@ unit           <- substr(stand_st$SITE_NEW, 8, 11)
 site           <- NA                      # Why is Site level missing from SITE_NEW?
 stand          <- substr(stand_st$SITE_NEW, 12, 15)
 num_plots      <- stand_st$NUM_PL
-num_age_plots  <- sum(imp_st$NUM_PL)      # this num of age trees
+num_age_plots  <- NA
 walk_acres     <- NA                      # unclear what area being referenced
 inventory_year <- NA                      # age_fixed_summary? string of years?
 dom_soil_type  <- NA                      # new tool?
