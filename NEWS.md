@@ -1,7 +1,16 @@
+# Updates 06/05/2020
+* Added Ben's fancy 3-digit species richness code. 
+* Updated report value formatting. 
+* Added the ability to run reports for all of the stands in the input stand summary table. 
+* Added an `index.html` to the output reports folder to quickly navigate outputs. 
+* Enabled GitHub Pages to display example reports. [https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/)
+* Added a data folder to hold the FMG reference tables: `SppMastType.csv` (species common name, USDA code, mast type, typical species), `FCOM.csv` (USDA code, forest community type)
+* Added the `TYPICAL` field to the `SppMastType.csv` table to record the whether a species is common or uncommon (aka. typical). This was needed to implement Ben's fancy 3-digit species richness code.  
+
 # Updates 06/02/2020
 * Added an ArcGIS toolbox to allow the reports to be called from ArcGIS. 
 * Created a Stand Walk Summary tool that calls the Stand Walk Summary report. 
-* Added Beaver Island summary geodatabase to the test folder. This data has been used for development and testing. This summaries were created on 5/11/2020. 
+* Added Beaver Island summary geodatabase to the test folder. This data has been used for development and testing. These summaries were created on 5/11/2020. 
 * Report currently displays only the summary values calculated by the current FMG summary scripts. Missing values will need to reference new fields that are added to the FMG summary scripts. 
 * Is report supposed to be able to run for multiple hierarchical levels or just the stand level?
 
