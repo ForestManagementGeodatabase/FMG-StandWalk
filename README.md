@@ -11,6 +11,13 @@ The "Stand Walk Recon" task is composed of two elements:
 ## Funding
 Funding for the development and maintenance of the Forest Management Geodatabase (FMG) has been provided by USACE Rock Island District, Operations Division, Mississippi River Project, Natural Resources. 
 
+## Latest Updates
+Check out the [NEWS](NEWS.md) for details on the latest updates. 
+
 ## Authors
 * [Michael Dougherty](mailto:Michael.P.Dougherty@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
 * [Christopher Hawes](mailto:Christopher.C.Hawes@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
+
+## Preview Reports
+Use this link to preview the stand reports for the Beaver Island test data:
+[https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/)
