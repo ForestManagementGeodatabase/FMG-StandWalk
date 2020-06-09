@@ -136,3 +136,28 @@ compare_params <- function(in_params, param_list) {
 forward_slash <- function(path) {
   path <- gsub("\\\\", "/", path)
 }
+
+
+#' @title Converts FMG unique identifier to the current standard
+#' 
+#' @description Converts the FMG unique identifier fileds to the current 
+#' standard from any variant that has been in use over the life of the project.
+#' 
+#' @param df    data frame; A FMG data frame. 
+#' 
+#' @details The current requirement for the unique id is `Site_ID`
+#' 
+#' @return A FMG data frame with the currently used unique identifier field 
+#' names.
+#' 
+fix_fmg_id <- function(df) {
+  if("SITE_NEW" %in% colnames(df)) {
+    df$Site_ID <- df$SITE_NEW
+    df <- dplyr::select(df, -SITE_NEW)
+  }
+  if("SITE_ID" %in% colnames(df)) {
+    df$Site_ID <- df$SITE_ID
+    df <- dplyr::select(df, -SITE_ID)
+  }
+  return(df)
+}
