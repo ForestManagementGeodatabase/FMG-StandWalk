@@ -151,6 +151,9 @@ forward_slash <- function(path) {
 #' names.
 #' 
 fix_fmg_id <- function(df) {
+  if("Site_ID" %in% colnames(df)) {
+    return(df)
+  }
   if("SITE_NEW" %in% colnames(df)) {
     df$Site_ID <- df$SITE_NEW
     df <- dplyr::select(df, -SITE_NEW)
