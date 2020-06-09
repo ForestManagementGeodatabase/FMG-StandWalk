@@ -1,4 +1,10 @@
-# Updates 06/05/2020
+# Updates 6/9/2020
+* Added parameter to specify the polygon of the FMG hierarchy level (either "Stand" or "Site") used to calculate the "stand" summaries. The polygons are required to calculate the area that the "stand"" represents. 
+* Automatically detects if a FMG "Site" or "Stand" has been specified. 
+* Automatically compensates for the different formats of the the FMG unique identifier used over the life of the project. Handles both differences in field naming and structure of the FMG hierarchy coding of the unique identifier string. 
+* Uses the `sf` R package to calculate area and convert to acres.
+
+# Updates 6/5/2020
 * Added Ben's fancy 3-digit species richness code. 
 * Updated report value formatting. 
 * Added the ability to run reports for all of the stands in the input stand summary table. 
@@ -7,7 +13,7 @@
 * Added a data folder to hold the FMG reference tables: `SppMastType.csv` (species common name, USDA code, mast type, typical species), `FCOM.csv` (USDA code, forest community type)
 * Added the `TYPICAL` field to the `SppMastType.csv` table to record the whether a species is common or uncommon (aka. typical). This was needed to implement Ben's fancy 3-digit species richness code.  
 
-# Updates 06/02/2020
+# Updates 6/2/2020
 * Added an ArcGIS toolbox to allow the reports to be called from ArcGIS. 
 * Created a Stand Walk Summary tool that calls the Stand Walk Summary report. 
 * Added Beaver Island summary geodatabase to the test folder. This data has been used for development and testing. These summaries were created on 5/11/2020. 
@@ -15,7 +21,7 @@
 * Is report supposed to be able to run for multiple hierarchical levels or just the stand level?
 
 
-# Updates 05/31/2020
+# Updates 5/31/2020
 
 * Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN. 
 * This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
