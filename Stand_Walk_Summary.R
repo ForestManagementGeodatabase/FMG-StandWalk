@@ -4,6 +4,8 @@
 #' the `stand_summary_tbl`. 
 #' 
 #' @export
+#' @param stand_polys            feature class; A feature class representing the 
+#'                               "stands" in the summary tables. 
 #' @param stand_summary_tbl      .gdb table; A FMG stand summary table. 
 #' @param age_fixed_summary_tbl  .gdb table; A FMG age & fixed plot summary 
 #'                               table.
@@ -25,31 +27,37 @@ tool_exec <- function(in_params, out_params) {
   set_pandoc()
   
   # Load required libraries
-  load_packages(c("dplyr", "tibble"))
+  load_packages(c("dplyr", "tibble", "sf"))
   
   # gp tool parameters
-  stand_summary_tbl         <- in_params[[1]]  
-  age_fixed_summary_tbl     <- in_params[[2]]
-  species_summary_tbl       <- in_params[[3]]
-  health_summary_tbl        <- in_params[[4]]
+  stand_polys               <- in_params[[1]] 
+  stand_summary_tbl         <- in_params[[2]]  
+  age_fixed_summary_tbl     <- in_params[[3]]
+  species_summary_tbl       <- in_params[[4]]
+  health_summary_tbl        <- in_params[[5]]
 
   # Code for testing in RStudio
+  # library(dplyr)
+  # library(tibble)
   # library(sf)
   # dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
-  # stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Stand_Sum"
-  # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Age_Fixed_Sum"
-  # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Species_Sum"
-  # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Beaver_Island_Sum.gdb\\Health_Sum"
-  # in_params <- list(stand_summary_tbl, age_fixed_summary_tbl, 
+  # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Pool_21_Sites"
+  # stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Stand_Summary"
+  # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age_Fixed_Summary"
+  # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Species_Summary"
+  # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Health_Summary"
+  # in_params <- list(stand_polys,
+  #                   stand_summary_tbl, age_fixed_summary_tbl,
   #                   species_summary_tbl, health_summary_tbl)
 
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
-  param_list <- tibble::lst(stand_summary_tbl, age_fixed_summary_tbl, 
+  param_list <- tibble::lst(stand_polys, 
+                            stand_summary_tbl, age_fixed_summary_tbl, 
                             species_summary_tbl, health_summary_tbl)
   
   ## Get parameter verification table
-  message("Compare input tool parameters")
+  message("Compare input tool parameters...")
   print(compare_params(in_params, param_list))
   
   # Create a `reports` folder in the parent folder that holds the geodatabase
@@ -59,29 +67,48 @@ tool_exec <- function(in_params, out_params) {
     dir.create(report_dir)
   }
   
-  # Convert the geodatabase tables to data frames
+  # Convert the geodatabase freature class and tables to data frames
   gdb <- dirname(age_fixed_summary_tbl)
-  age_fixed_summary <- sf::read_sf(dsn = gdb,
-                               layer = basename(age_fixed_summary_tbl))
-  stand_summary     <- sf::read_sf(dsn = gdb,
+  message("Reading data sources...")
+  stand_polys_sf    <- sf::st_read(dsn = gdb,
+                                   layer = basename(stand_polys))
+  age_fixed_summary <- sf::st_read(dsn = gdb,
+                                   layer = basename(age_fixed_summary_tbl))
+  stand_summary     <- sf::st_read(dsn = gdb,
                                layer = basename(stand_summary_tbl))
-  species_summary   <- sf::read_sf(dsn = gdb,
+  species_summary   <- sf::st_read(dsn = gdb,
                                layer = basename(species_summary_tbl))
-  health_summary    <- sf::read_sf(dsn = gdb,
+  health_summary    <- sf::st_read(dsn = gdb,
                                    layer = basename(health_summary_tbl))
-
-  # Get a list of stand_ids from the stand_summary_tbl
-  stand_vector <- stand_summary$SITE_NEW
   
-  # Create a list to store reports
+  # Fix FMG unique id fields
+  stand_polys_sf    <- fix_fmg_id(stand_polys_sf)
+  age_fixed_summary <- fix_fmg_id(age_fixed_summary)
+  stand_summary     <- fix_fmg_id(stand_summary)
+  species_summary   <- fix_fmg_id(species_summary)
+  health_summary    <- fix_fmg_id(health_summary)
+  
+  message("stand_polys_sf: ", colnames(stand_polys_sf))
+  message("age_fixed_summary: ", colnames(age_fixed_summary))
+  message("stand_summary: ", colnames(stand_summary))
+  message("species_summary: ", colnames(species_summary))
+  message("health_summary: ", colnames(health_summary))
+
+  # Create a list to store reports for indexing
   report_files <- list()
+  
+  # Get a list of stand_ids from the stand_summary_tbl
+  stand_vector <- stand_summary$Site_ID
   
   # Iterate through stands
   for (s in stand_vector) {
     # Set the report name
     report_name <- paste0("Stand_Summary_", s, ".html")
     output_file <- file.path(report_dir, report_name)
+    
+    # Add the report to the list for indexing
     report_files <- append(report_files, output_file)
+    message("Creating report: ", report_name)
     
     # Remove the report file if it already exists
     if (file.exists(output_file)) {
@@ -90,6 +117,7 @@ tool_exec <- function(in_params, out_params) {
     
     # Set report parameters
     report_params <- list("stand_id" =  s,
+                          "stand_polys" = stand_polys_sf, 
                           "age_fixed_summary" = age_fixed_summary,
                           "stand_summary" = stand_summary,
                           "species_summary" = species_summary,

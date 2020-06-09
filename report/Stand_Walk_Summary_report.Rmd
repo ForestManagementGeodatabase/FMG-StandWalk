@@ -5,6 +5,7 @@ output:
     css: style_1.css
 params:
   stand_id:                         # string
+  stand_polys:                      # sf
   age_fixed_summary:                # data frame
   stand_summary:                    # data frame
   species_summary:                  # data frame
@@ -12,8 +13,10 @@ params:
 ---
 
 ```{r get_data, echo=FALSE}
-report_version <- "0.1.2"
+report_version <- "0.1.3"
 
+library(sf)
+library(units)
 library(dplyr)
 library(stringr)
 
@@ -26,7 +29,7 @@ spp_masttype <- read.csv(spp_masttype_file)
 
 ```{r test_data, echo=FALSE}
 # For testing (cannot use the variable name `params` as it is controlled by the IDE)
-# params <- list("stand_id" = stand_id,
+# params2 <- list("stand_id" = stand_id,
 #                 "age_fixed_summary" = age_fixed_summary,
 #                 "stand_summary" = stand_summary,
 #                 'species_summary' = species_summary,
@@ -36,13 +39,34 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```{r select_stand, echo=FALSE}
 # Filter for the current stand
 age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
-                              SITE_NEW == params$stand_id)
+                              Site_ID == params$stand_id)
 stand_st     <- dplyr::filter(params$stand_summary, 
-                              SITE_NEW == params$stand_id)
+                              Site_ID == params$stand_id)
 species_st   <- dplyr::filter(params$species_summary, 
-                              SITE_NEW == params$stand_id)
+                              Site_ID == params$stand_id)
 health_st    <- dplyr::filter(params$health_summary, 
-                              SITE_NEW == params$stand_id)
+                              Site_ID == params$stand_id)
+```
+
+```{r site_or_stand, echo=FALSE}
+# Determine if `stand_polys` are `Site` or `Stand`, then calculate acres
+if("SID" %in% colnames(params$stand_polys)) {
+  # FMG Stand
+  poly_st <- dplyr::filter(params$stand_polys,
+                           SID == params$stand_id)
+  area <- sf::st_area(poly_st)
+  acres <- units::set_units(area, acre)
+
+} else if("Site_ID" %in% colnames(params$stand_polys)) {
+  # FMG Site
+  poly_st <- dplyr::filter(params$stand_polys,
+                           Site_ID == params$stand_id)
+  area <- sf::st_area(poly_st)
+  acres <- units::set_units(area, acre)
+
+} else {
+  stop("`stand_polys` is missing a known FMG ID field.")
+}
 ```
 
 ```{r sort_tables, echo=FALSE}
@@ -77,8 +101,8 @@ hard_mast_spp_count <- length(species_hard_mast$TR_SP)
 
 ```{r parse_fmg_levels, echo=FALSE}
 # Parse FMG spatial hierarchy
-## Clean up `SITE_NEW` to make it easier to parse
-SITE_CLEAN <- str_replace(stand_st$SITE_NEW, "st", "t")
+## Clean up `Site_ID` to make it easier to parse
+SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
 
 ## Match alpha hiearchy delimiter (p, c, u, t, s), then digits, 0 or more (\\d*)
 pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]
@@ -127,7 +151,7 @@ site           <- site_label
 stand          <- stand_label
 num_plots      <- stand_st$NUM_PL
 num_age_plots  <- NA
-walk_acres     <- NA                      
+walk_acres     <- round(acres, 2)
 inventory_year <- NA                      # age_fixed_summary? string of years?
 dom_soil_type  <- NA                      # new tool?
 
@@ -266,7 +290,7 @@ FMG Stand
 `r num_age_plots`
 :::
 ::: {.var-name}
-Walk Acreage
+Area (acre)
 :::
 ::: {.var-value}
 `r walk_acres`
