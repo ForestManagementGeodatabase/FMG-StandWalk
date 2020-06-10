@@ -236,7 +236,7 @@ under_height     <- paste0(round(age_fixed_st$UND_HT, 2), "'")
 snag_tpa         <- floor(stand_st$SNAG_TPA)
 stand_age        <- floor(age_fixed_st$TR_AGE)
 hard_mast_age    <- mean(age_hard_mast$AGE_ORIG)
-growth           <- NA                    # where should this live?
+growth           <- floor(mean(age_pts_st$AGE_GRW))
 stand_health     <- health_sort[1,]$TR_HLTH
 species_rich     <- species_richness
 regen_rate       <- floor(age_fixed_st$UND_COV)
