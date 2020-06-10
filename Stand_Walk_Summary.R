@@ -47,21 +47,21 @@ tool_exec <- function(in_params, out_params) {
   health_summary_tbl        <- in_params[[8]]
 
   # Code for testing in RStudio
-  library(dplyr)
-  library(tibble)
-  library(sf)
-  dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
-  stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Pool_21_Sites"
-  age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age"
-  fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Fixed"
-  prism_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Prism"
-  stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Stand_Summary"
-  age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age_Fixed_Summary"
-  species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Species_Summary"
-  health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Health_Summary"
-  in_params <- list(stand_polys, age_pts, fixed_pts, prism_pts, 
-                    stand_summary_tbl, age_fixed_summary_tbl,
-                    species_summary_tbl, health_summary_tbl)
+  # library(dplyr)
+  # library(tibble)
+  # library(sf)
+  # dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
+  # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Pool_21_Sites"
+  # age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age"
+  # fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Fixed"
+  # prism_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Prism"
+  # stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Stand_Summary"
+  # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age_Fixed_Summary"
+  # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Species_Summary"
+  # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Health_Summary"
+  # in_params <- list(stand_polys, age_pts, fixed_pts, prism_pts, 
+  #                   stand_summary_tbl, age_fixed_summary_tbl,
+  #                   species_summary_tbl, health_summary_tbl)
 
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
