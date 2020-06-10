@@ -17,6 +17,8 @@ Check out the [NEWS](NEWS.md) for details on the latest updates.
 ## Authors
 * [Michael Dougherty](mailto:Michael.P.Dougherty@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
 * [Christopher Hawes](mailto:Christopher.C.Hawes@usace.army.mil), Geographer, Rock Island District, U.S. Army Corps of Engineers
+* [Ben Vandermyde](mailto:Benjamin.J.Vandermyde@usace.army.mil), Forester, Rock Island District, U.S. Army Corps of Engineers
+* [Lauren McNeal](mailto:Lauren.J.McNeal@usace.army.mil), Forester, Rock Island District, U.S. Army Corps of Engineers
 
 ## Preview Reports
 Use this link to preview the stand reports for the Mississippi River Pool 21 Pecan Grove test data:
