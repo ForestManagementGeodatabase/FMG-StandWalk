@@ -26,29 +26,34 @@ Use this link to preview the stand reports for the Mississippi River Pool 21 Pec
 Use the following instructions to start running the reports. This toolbox requires the user to install `R`, `RStudio`, `ArcGIS Pro`, and optionally, `ArcMap`.
 
 ### Install `R`
+`R` is a statistical computing environment required to perform calculations and report generation. 
 * Ensure that `R` is installed. 
 * `R` version 3.6.3 or greater is recommended. 
 
 ### Install `RStudio`
+`Rstudio` is an Integrated Development Environment (IDE) for `R` that streamlines development and troubleshooting. 
 * Ensure that `Rstudio` is installed.
 * `RStudio` version 1.2.5033 or greater is recommended. 
 
 ### Install `ArcGIS Pro`
+`ArcGIS Pro` is the GIS environment where the FMG data will be developed and the toolbox will be run from. 
 * Ensure that `ArcGIS Pro` is installed. 
 * `ArcGIS Pro` version 2.5 or greater is recommended. 
 
 ### Install `arcgisbinding`
+The `arcgisbinding` `R` package is developed and maintained by ESRI to support import and export of GIS data into `R`. 
 * In `ArcGIS Pro`, on the top menu, click "Project", click "Options" on the left menu.
 * In the "Options" dialog box, click "Geoprocessing" on the left menu. 
 * On the "Geoprocessing" page, scroll down to the "R-ArcGIS Support" section.
 * In the "R-ArcGIS Support" section, verify the installed `R` version for ArcGIS to use.
 * Below the "Detected R home directories" drop-down menu, you will see the `arcgisbinding` package section. From the drop-down, choose the "Check package for updates" option. If needed, install the latest version. 
-* This package allows `ArcGIS Pro` and `ArcMap` to talk to R. Installing it through `ArcGIS Pro` enables it for use in `ArcMap` as well. 
+* This `R` package allows `ArcGIS Pro` and `ArcMap` to talk to R. Installing it through `ArcGIS Pro` enables it for use in `ArcMap` as well. 
 
 ### Download the toolbox
+The code in this repository contains all of the files needed to use this ArcGIS toolbox. 
 * Use the green "Clone or download" button above to download a ZIP archive of the toolbox. 
 * Unzip the archive to your project folder. 
-* In `ArcMap` or `ArcGIS Pro`, navigate to the folder where you just unzipped the archive and you are ready to use the toolbox. 
+* In `ArcMap` or `ArcGIS Pro`, navigate to the folder where you just unzipped the archive and you are ready to use the `StandWalk` ArcGIS toolbox. 
 
 ## Test Data
-The functionality of this toolbox can be tested using the data provided in the `FMG_StandWalk/test` folder. In the test folder you will find a series of sites where the FMG forestry surveys have been conducted. These geodatabases contain the QA'd necessary to produce a Stand Walk Summary report. 
+The functionality of this toolbox can be tested using the data provided in the `FMG_StandWalk/test` folder. In the test folder you will find a series of sites where the FMG forestry surveys have been conducted. These geodatabases contain the QA'd data necessary to produce a Stand Walk Summary report. 
