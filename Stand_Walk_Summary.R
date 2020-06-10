@@ -4,8 +4,15 @@
 #' the `stand_summary_tbl`. 
 #' 
 #' @export
-#' @param stand_polys            feature class; A feature class representing the 
-#'                               "stands" in the summary tables. 
+#' @param stand_polys            feature class; A FMG polygon feature class 
+#'                               representing the "stands" in the summary 
+#'                               tables (either FMG "Sites" or "Stands"). 
+#' @param age_pts                feature class; A FMG point feature class 
+#'                               representing age plots.        
+#' @param fixed_pts              feature class; A FMG point feature class 
+#'                               representing fixed plots.  
+#' @param prism_pts              feature class; A FMG point feature class 
+#'                               representing prism plots.  
 #' @param stand_summary_tbl      .gdb table; A FMG stand summary table. 
 #' @param age_fixed_summary_tbl  .gdb table; A FMG age & fixed plot summary 
 #'                               table.
@@ -30,29 +37,35 @@ tool_exec <- function(in_params, out_params) {
   load_packages(c("dplyr", "tibble", "sf"))
   
   # gp tool parameters
-  stand_polys               <- in_params[[1]] 
-  stand_summary_tbl         <- in_params[[2]]  
-  age_fixed_summary_tbl     <- in_params[[3]]
-  species_summary_tbl       <- in_params[[4]]
-  health_summary_tbl        <- in_params[[5]]
+  stand_polys               <- in_params[[1]]
+  age_pts                   <- in_params[[2]]
+  fixed_pts                 <- in_params[[3]]
+  prism_pts                 <- in_params[[4]]
+  stand_summary_tbl         <- in_params[[5]]  
+  age_fixed_summary_tbl     <- in_params[[6]]
+  species_summary_tbl       <- in_params[[7]]
+  health_summary_tbl        <- in_params[[8]]
 
   # Code for testing in RStudio
-  # library(dplyr)
-  # library(tibble)
-  # library(sf)
-  # dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
-  # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Pool_21_Sites"
-  # stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Stand_Summary"
-  # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age_Fixed_Summary"
-  # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Species_Summary"
-  # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Health_Summary"
-  # in_params <- list(stand_polys,
-  #                   stand_summary_tbl, age_fixed_summary_tbl,
-  #                   species_summary_tbl, health_summary_tbl)
+  library(dplyr)
+  library(tibble)
+  library(sf)
+  dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
+  stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Pool_21_Sites"
+  age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age"
+  fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Fixed"
+  prism_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Prism"
+  stand_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Stand_Summary"
+  age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Age_Fixed_Summary"
+  species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Species_Summary"
+  health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\20200401_PecanGrove_Summaries.gdb\\Health_Summary"
+  in_params <- list(stand_polys, age_pts, fixed_pts, prism_pts, 
+                    stand_summary_tbl, age_fixed_summary_tbl,
+                    species_summary_tbl, health_summary_tbl)
 
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
-  param_list <- tibble::lst(stand_polys, 
+  param_list <- tibble::lst(stand_polys, age_pts, fixed_pts, prism_pts, 
                             stand_summary_tbl, age_fixed_summary_tbl, 
                             species_summary_tbl, health_summary_tbl)
   
@@ -72,6 +85,12 @@ tool_exec <- function(in_params, out_params) {
   message("Reading data sources...")
   stand_polys_sf    <- sf::st_read(dsn = gdb,
                                    layer = basename(stand_polys))
+  age_pts_sf        <- sf::st_read(dsn = gdb,
+                                   layer = basename(age_pts))
+  fixed_pts_sf      <- sf::st_read(dsn = gdb,
+                                   layer = basename(fixed_pts))
+  prism_pts_sf      <- sf::st_read(dsn = gdb,
+                                   layer = basename(prism_pts))
   age_fixed_summary <- sf::st_read(dsn = gdb,
                                    layer = basename(age_fixed_summary_tbl))
   stand_summary     <- sf::st_read(dsn = gdb,
@@ -83,12 +102,18 @@ tool_exec <- function(in_params, out_params) {
   
   # Fix FMG unique id fields
   stand_polys_sf    <- fix_fmg_id(stand_polys_sf)
+  age_pts_sf        <- fix_fmg_id(age_pts_sf)
+  fixed_pts_sf      <- fix_fmg_id(fixed_pts_sf)
+  prism_pts_sf      <- fix_fmg_id(prism_pts_sf)
   age_fixed_summary <- fix_fmg_id(age_fixed_summary)
   stand_summary     <- fix_fmg_id(stand_summary)
   species_summary   <- fix_fmg_id(species_summary)
   health_summary    <- fix_fmg_id(health_summary)
   
   message("stand_polys_sf: ", colnames(stand_polys_sf))
+  message("age_pts_sf: ", colnames(age_pts_sf))
+  message("fixed_pts_sf: ", colnames(fixed_pts_sf))
+  message("prism_pts_sf: ", colnames(prism_pts_sf))
   message("age_fixed_summary: ", colnames(age_fixed_summary))
   message("stand_summary: ", colnames(stand_summary))
   message("species_summary: ", colnames(species_summary))
@@ -118,6 +143,9 @@ tool_exec <- function(in_params, out_params) {
     # Set report parameters
     report_params <- list("stand_id" =  s,
                           "stand_polys" = stand_polys_sf, 
+                          "age_pts" = age_pts_sf,
+                          "fixed_pts" = fixed_pts_sf,
+                          "prism_pts" = prism_pts_sf,
                           "age_fixed_summary" = age_fixed_summary,
                           "stand_summary" = stand_summary,
                           "species_summary" = species_summary,
