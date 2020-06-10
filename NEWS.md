@@ -1,8 +1,20 @@
+# Updates 6/10/2020
+* Added the FMG point feature classes `AGE`, `FIXED`, and `PRISM` as parameters to  calculate metrics not currently summarized by the FMG summary tables. 
+* Added the "Top 3 Understory Species". 
+* Added the "Top 3 Gound Species". 
+* Calculated the number of age plots.
+* Listed the inventory years.
+* Calculated mean hard mast years. 
+* Calculated mean growth. 
+* Still waiting on the stocking equation from Ben and Lauren. 
+
+
 # Updates 6/9/2020
 * Added parameter to specify the polygon of the FMG hierarchy level (either "Stand" or "Site") used to calculate the "stand" summaries. The polygons are required to calculate the area that the "stand"" represents. 
 * Automatically detects if a FMG "Site" or "Stand" has been specified. 
 * Automatically compensates for the different formats of the the FMG unique identifier used over the life of the project. Handles both differences in field naming and structure of the FMG hierarchy coding of the unique identifier string. 
 * Uses the `sf` R package to calculate area and convert to acres.
+
 
 # Updates 6/5/2020
 * Added Ben's fancy 3-digit species richness code. 
@@ -13,6 +25,7 @@
 * Added a data folder to hold the FMG reference tables: `SppMastType.csv` (species common name, USDA code, mast type, typical species), `FCOM.csv` (USDA code, forest community type)
 * Added the `TYPICAL` field to the `SppMastType.csv` table to record the whether a species is common or uncommon (aka. typical). This was needed to implement Ben's fancy 3-digit species richness code.  
 
+
 # Updates 6/2/2020
 * Added an ArcGIS toolbox to allow the reports to be called from ArcGIS. 
 * Created a Stand Walk Summary tool that calls the Stand Walk Summary report. 
@@ -22,8 +35,6 @@
 
 
 # Updates 5/31/2020
-
-* Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN. 
-* This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
+* Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN. * This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
 * For `.html` output, this report uses the `.css` `grid` framework to define the layout the report. 
 * For `.pdf` output, this report does not currently contain any `.tex` code to style the report. To support `.pdf` output, this would require an entirely separate codebase in `.tex` format to mimic the current `.css`-based report layout. Therefore during development, it is recommended to only support the `.html` output version, at least until development of the report has matured. Once the report format has matured, a `.pdf` version can be developed to prevent unnecessary duplication of effort during development. 
