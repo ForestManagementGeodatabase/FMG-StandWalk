@@ -6,19 +6,24 @@ output:
 params:
   stand_id:                         # string
   stand_polys:                      # sf
+  age_pts:                          # sf
+  fixed_pts:                        # sf
+  prism_pts:                        # sf
   age_fixed_summary:                # data frame
   stand_summary:                    # data frame
   species_summary:                  # data frame
   health_summary:                   # data frame
 ---
 
-```{r get_data, echo=FALSE}
-report_version <- "0.1.3"
+```{r get_data, echo=FALSE, warning=FALSE}
+report_version <- "0.1.4"
 
 library(sf)
 library(units)
 library(dplyr)
 library(stringr)
+library(lubridate)
+library(tidyr)
 
 # Get the species-mast type table
 fmg_dir <- ".."
@@ -38,6 +43,12 @@ spp_masttype <- read.csv(spp_masttype_file)
 
 ```{r select_stand, echo=FALSE}
 # Filter for the current stand
+age_pts_st   <- dplyr::filter(params$age_pts, 
+                              Site_ID == params$stand_id)
+fixed_pts_st <- dplyr::filter(params$fixed_pts, 
+                              Site_ID == params$stand_id)
+prism_pts_st <- dplyr::filter(params$prism_pts, 
+                              Site_ID == params$stand_id)
 age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
                               Site_ID == params$stand_id)
 stand_st     <- dplyr::filter(params$stand_summary, 
@@ -97,6 +108,9 @@ hard_mast_QM_DBH <- sqrt(hard_mast_BA_TPA/0.005454154)
 
 # Count of hard mast species
 hard_mast_spp_count <- length(species_hard_mast$TR_SP)
+
+# Filter age_pts_st for only hard mast species
+age_hard_mast <- dplyr::filter(age_pts_st, AGE_SP %in% hard_mast_spp$TR_SP)
 ```
 
 ```{r parse_fmg_levels, echo=FALSE}
@@ -138,6 +152,35 @@ other_spp_count <- length(species_other$TR_SP)
 species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_count)
 ```
 
+```{r understory, echo=FALSE, warning=FALSE, message=FALSE}
+# Simplify fixed_pts_st to just understory fields
+fixed_understory <- fixed_pts_st[, c("PLOT", "UND_SP1", "UND_SP2", "UND_SP3")]
+# Drop factors
+fixed_understory$UND_SP1 <- as.character(fixed_understory$UND_SP1)
+fixed_understory$UND_SP2 <- as.character(fixed_understory$UND_SP2)
+fixed_understory$UND_SP3 <- as.character(fixed_understory$UND_SP3)
+# Drop geometry
+fixed_understory <- sf::st_drop_geometry(fixed_understory)
+# Set missing data to NA
+fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"")))
+fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.," ")))
+fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"<Null>")))
+fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"<NULL>")))
+# Convert to long format by combining `UND_SP*` fields
+understory <- tidyr::pivot_longer(data = fixed_understory,
+                                  cols = -PLOT,
+                                  names_to = c(".value", "SP"),
+                                  names_sep = "_",
+                                  values_drop_na = TRUE)
+# Group by understory species
+understory_species <- dplyr::group_by(understory, UND)
+# Count understory species
+understory_species_count <- dplyr::summarize(understory_species, 
+                                             count = n())
+# Sort 
+understory_species_count <- dplyr::arrange(understory_species_count, desc(count))
+```
+
 ```{r set_variables, echo=FALSE}
 # collector
 forester <- ""
@@ -150,9 +193,9 @@ unit           <- unit_label
 site           <- site_label
 stand          <- stand_label
 num_plots      <- stand_st$NUM_PL
-num_age_plots  <- NA
+num_age_plots  <- length(age_pts_st$PLOT)
 walk_acres     <- round(acres, 2)
-inventory_year <- NA                      # age_fixed_summary? string of years?
+inventory_year <- unique(lubridate::year(fixed_pts_st$FP_DATE))
 dom_soil_type  <- NA                      # new tool?
 
 # stand-summary-data
@@ -169,7 +212,7 @@ hard_mast_stock  <- NA
 under_height     <- paste0(round(age_fixed_st$UND_HT, 2), "'")
 snag_tpa         <- floor(stand_st$SNAG_TPA)
 stand_age        <- floor(age_fixed_st$TR_AGE)
-hard_mast_age    <- NA                    
+hard_mast_age    <- mean(age_hard_mast$AGE_ORIG)
 growth           <- NA                    # where should this live?
 stand_health     <- health_sort[1,]$TR_HLTH
 species_rich     <- species_richness
@@ -182,9 +225,9 @@ mature           <- floor(stand_st$MAT_TPA)
 overmature       <- floor(stand_st$OVM_TPA)
 
 # Top 3 Understory Species
-under_species_1 <- NA
-under_species_2 <- NA
-under_species_3 <- NA
+under_species_1 <- understory_species_count$UND[1]
+under_species_2 <- understory_species_count$UND[2]
+under_species_3 <- understory_species_count$UND[3]
 
 # Top 3 Ground Species
 ground_species_1 <- NA
