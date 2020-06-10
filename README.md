@@ -1,5 +1,5 @@
 # FMG-StandWalk 
-Creates a Forest Management Geodatabase (FMG) Stand Walk Report. <img src="docs/images/HDQLO-03_h120.jpg" align="right" />
+An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Reports. <img src="docs/images/HDQLO-03_h120.jpg" align="right" />
 
 ## Description
 The purpose of this report is to automate the production of the reports needed by foresters to conduct the "Stand Walk Recon" task. The purpose of a Stand Walk Recon is to assess the current condition of a given forest stand using the forest survey data recorded in the FMG, and from this information, to develop a "Stand Prescription" that will define its management in the coming years. 
@@ -22,6 +22,9 @@ Check out the [NEWS](NEWS.md) for details on the latest updates.
 Use this link to preview the stand reports for the Mississippi River Pool 21 Pecan Grove test data:
 [https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/)
 
+## Design
+This ArcGIS toolbox contains a set of `R` scripts that import a set of standard FMG geospatial datasets and produce a set of forest stand summary reports. These reports are built using R Markdown, that is introduced [here](https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F) and described in detail [here](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html). This approach makes available the advanced data science and reporting capabilities of `R` within USACE's enterprise GIS software, ArcGIS Pro and ArcMap. 
+
 ## Install
 Use the following instructions to start running the reports. This toolbox requires the user to install `R`, `RStudio`, `ArcGIS Pro`, and optionally, `ArcMap`.
 
@@ -42,12 +45,12 @@ Use the following instructions to start running the reports. This toolbox requir
 
 ### Install `arcgisbinding`
 The `arcgisbinding` `R` package is developed and maintained by ESRI to support import and export of GIS data into `R`. 
-* In `ArcGIS Pro`, on the top menu, click "Project", click "Options" on the left menu.
+* In `ArcGIS Pro`, on the top menu, click "Project", and click "Options" on the left menu.
 * In the "Options" dialog box, click "Geoprocessing" on the left menu. 
 * On the "Geoprocessing" page, scroll down to the "R-ArcGIS Support" section.
 * In the "R-ArcGIS Support" section, verify the installed `R` version for ArcGIS to use.
-* Below the "Detected R home directories" drop-down menu, you will see the `arcgisbinding` package section. From the drop-down, choose the "Check package for updates" option. If needed, install the latest version. 
-* This `R` package allows `ArcGIS Pro` and `ArcMap` to talk to R. Installing it through `ArcGIS Pro` enables it for use in `ArcMap` as well. 
+* Below the "Detected R home directories" drop-down menu, you will see the `arcgisbinding` package section. From the drop-down, choose the "Check for package updates" option. If needed, install the latest package version. 
+* This `R` package allows `ArcGIS Pro` and `ArcMap` to read and write to R. Installing it through `ArcGIS Pro` also enables it for use in `ArcMap` as well. 
 
 ### Download the toolbox
 The code in this repository contains all of the files needed to use this ArcGIS toolbox. 
