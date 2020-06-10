@@ -153,7 +153,7 @@ species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_cou
 ```
 
 ```{r understory, echo=FALSE, warning=FALSE, message=FALSE}
-# Simplify fixed_pts_st to just understory fields
+# Simplify fixed_pts_st to just understory species fields
 fixed_understory <- fixed_pts_st[, c("PLOT", "UND_SP1", "UND_SP2", "UND_SP3")]
 # Drop factors
 fixed_understory$UND_SP1 <- as.character(fixed_understory$UND_SP1)
@@ -162,11 +162,8 @@ fixed_understory$UND_SP3 <- as.character(fixed_understory$UND_SP3)
 # Drop geometry
 fixed_understory <- sf::st_drop_geometry(fixed_understory)
 # Set missing data to NA
-fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"")))
-fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.," ")))
-fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"<Null>")))
-fixed_understory <- dplyr::mutate_all(fixed_understory, list(~na_if(.,"<NULL>")))
-# Convert to long format by combining `UND_SP*` fields
+fixed_understory <- set_na(fixed_understory)
+# Convert to long format by combining `UND_SP*` fields into a single field
 understory <- tidyr::pivot_longer(data = fixed_understory,
                                   cols = -PLOT,
                                   names_to = c(".value", "SP"),
@@ -179,6 +176,32 @@ understory_species_count <- dplyr::summarize(understory_species,
                                              count = n())
 # Sort 
 understory_species_count <- dplyr::arrange(understory_species_count, desc(count))
+```
+
+```{r ground, echo=FALSE, warning=FALSE, message=FALSE}
+# Simplify fixed_pts_st to just ground species fields
+fixed_ground <- fixed_pts_st[, c("PLOT", "GRD_SP1", "GRD_SP2", "GRD_SP3")]
+# Drop factors
+fixed_ground$GRD_SP1 <- as.character(fixed_ground$GRD_SP1)
+fixed_ground$GRD_SP2 <- as.character(fixed_ground$GRD_SP2)
+fixed_ground$GRD_SP3 <- as.character(fixed_ground$GRD_SP3)
+# Drop geometry
+fixed_ground <- sf::st_drop_geometry(fixed_ground)
+# Set missing data to NA
+fixed_ground <- set_na(fixed_ground)
+# Convert to long format by combining `GRD_SP*` fields into a single field
+ground <- tidyr::pivot_longer(data = fixed_ground,
+                              cols = -PLOT,
+                              names_to = c(".value", "SP"),
+                              names_sep = "_",
+                              values_drop_na = TRUE)
+# Group by understory species
+ground_species <- dplyr::group_by(ground, GRD)
+# Count understory species
+ground_species_count <- dplyr::summarize(ground_species, 
+                                         count = n())
+# Sort 
+ground_species_count <- dplyr::arrange(ground_species_count, desc(count))
 ```
 
 ```{r set_variables, echo=FALSE}
@@ -230,9 +253,9 @@ under_species_2 <- understory_species_count$UND[2]
 under_species_3 <- understory_species_count$UND[3]
 
 # Top 3 Ground Species
-ground_species_1 <- NA
-ground_species_2 <- NA
-ground_species_3 <- NA
+ground_species_1 <- ground_species_count$GRD[1]
+ground_species_2 <- ground_species_count$GRD[2]
+ground_species_3 <- ground_species_count$GRD[3]
 
 # Top 5 Overstory Species
 o1_usda_code  <- species_sort[1,]$TR_SP
