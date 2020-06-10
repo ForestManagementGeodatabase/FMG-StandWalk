@@ -34,7 +34,8 @@ tool_exec <- function(in_params, out_params) {
   set_pandoc()
   
   # Load required libraries
-  load_packages(c("dplyr", "tibble", "sf"))
+  load_packages(c("dplyr", "tibble", "stringr", "lubridate", "tidyr", "sf", 
+                  "units"))
   
   # gp tool parameters
   stand_polys               <- in_params[[1]]
