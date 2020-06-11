@@ -24,6 +24,7 @@
 * Enabled GitHub Pages to display example reports. [https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/)
 * Added a data folder to hold the FMG reference tables: `SppMastType.csv` (species common name, USDA code, mast type, typical species), `FCOM.csv` (USDA code, forest community type)
 * Added the `TYPICAL` field to the `SppMastType.csv` table to record the whether a species is common or uncommon (aka. typical). This was needed to implement Ben's fancy 3-digit species richness code.  
+* Added more test sites. 
 
 
 # Updates 6/2/2020
@@ -35,6 +36,7 @@
 
 
 # Updates 5/31/2020
-* Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN. * This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
-* For `.html` output, this report uses the `.css` `grid` framework to define the layout the report. 
-* For `.pdf` output, this report does not currently contain any `.tex` code to style the report. To support `.pdf` output, this would require an entirely separate codebase in `.tex` format to mimic the current `.css`-based report layout. Therefore during development, it is recommended to only support the `.html` output version, at least until development of the report has matured. Once the report format has matured, a `.pdf` version can be developed to prevent unnecessary duplication of effort during development. 
+* Developed a draft "Stand Walk Summary" report based on the version provided by OD-MN.
+* This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
+* For `.html` output, this report uses the `.css` `grid` framework to define the layout the report. The CSS Grid Layout module is a technique in Cascading Style Sheets that allows web developers to create complex responsive web design layouts more easily and consistently across browsers.
+* For `.pdf` output, this report does not currently contain any `.tex` code to style the report. To support `.pdf` output, this would require an entirely separate codebase in `.tex` format to mimic the current `.css`-based report layout. Therefore during development, it is recommended to only support the `.html` output version, at least until development of the report has matured. Once the report format has matured, a `.pdf` version could be developed if it is deemed necessary. This would prevent unnecessary duplication of effort during development. 
