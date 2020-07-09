@@ -1,5 +1,5 @@
 ---
-title: "FMG Stand Summary"
+title: "Stand Walk Recon Sheet"
 output:
   html_document:
     css: style_1.css
@@ -16,7 +16,7 @@ params:
 ---
 
 ```{r get_data, echo=FALSE, warning=FALSE}
-report_version <- "0.1.4"
+report_version <- "0.1.5"
 
 library(sf)
 library(units)
@@ -102,8 +102,14 @@ hard_mast_spp <- dplyr::filter(spp_masttype, MAST_TYPE == "HARD")
 ## Filter species_st for only hard mast species
 species_hard_mast <- dplyr::filter(species_st, TR_SP %in% hard_mast_spp$TR_SP)
 
+# Calculate hard mast tpa sum 
+hard_mast_tpa_sum <- sum(species_hard_mast$AV_TPA)
+
+# Calculate hard mast ba sum
+hard_mast_ba_sum <- sum(species_hard_mast$AV_BA)
+
 # Calculate hard mast QM_DBH
-hard_mast_BA_TPA <- (sum(species_hard_mast$AV_BA)/sum(species_hard_mast$AV_TPA))
+hard_mast_BA_TPA <- (hard_mast_ba_sum/hard_mast_tpa_sum)
 hard_mast_QM_DBH <- sqrt(hard_mast_BA_TPA/0.005454154)
 
 # Count of hard mast species
@@ -111,6 +117,36 @@ hard_mast_spp_count <- length(species_hard_mast$TR_SP)
 
 # Filter age_pts_st for only hard mast species
 age_hard_mast <- dplyr::filter(age_pts_st, AGE_SP %in% hard_mast_spp$TR_SP)
+```
+
+```{r stocking, echo=FALSE}
+# Set stocking parameters (Larsen et al., 2010)
+amd_p1 <- 0.259
+amd_p2 <- 0.973
+
+a_line_p1 <- 0.0685724
+a_line_p2 <- 0.0010125
+a_line_p3 <- 0.0023656
+
+# QMD to AMD conversion
+amd <- amd_p1 + (amd_p2 * stand_st$QM_DBH)
+
+# Calculate stocking
+stocking <- stand_st$AV_TPA * 
+            (a_line_p1 + a_line_p2 * amd + a_line_p3 * stand_st$QM_DBH^2)
+
+stocking_pct <- paste0(round(stocking, 0), "%")
+stocking_pct <- ifelse(stocking < 10, "<10%", stocking_pct)
+stocking_pct <- ifelse(stocking > 110, ">110%", stocking_pct)
+
+# Calculate hard mast stocking
+hm_stocking <- hard_mast_tpa_sum *
+               (a_line_p1 + a_line_p2 * amd + a_line_p3 * hard_mast_QM_DBH^2)
+
+hm_stocking_pct <- paste0(round(hm_stocking, 0), "%")
+hm_stocking_pct <- ifelse(hm_stocking < 10, "<10%", hm_stocking_pct)
+hm_stocking_pct <- ifelse(hm_stocking > 110, ">110%", hm_stocking_pct)
+
 ```
 
 ```{r parse_fmg_levels, echo=FALSE}
@@ -217,35 +253,48 @@ site           <- site_label
 stand          <- stand_label
 num_plots      <- stand_st$NUM_PL
 num_age_plots  <- length(age_pts_st$PLOT)
-walk_acres     <- round(acres, 2)
+walk_acres     <- round(acres, 0)
 inventory_year <- unique(lubridate::year(fixed_pts_st$FP_DATE))
-dom_soil_type  <- NA                      # new tool?
+dom_soil_type  <- NA                                  # new tool will calculate
 
 # stand-summary-data
-tpa              <- floor(stand_st$AV_TPA)
-basal_area       <- floor(stand_st$AV_BA)
+tpa              <- ifelse(stand_st$AV_TPA > 0 & stand_st$AV_TPA < 1, "<1", 
+                           floor(stand_st$AV_TPA))
+basal_area       <- ifelse(stand_st$AV_BA > 0 & stand_st$AV_BA < 1, "<1", 
+                           floor(stand_st$AV_BA))
 qm_dbh           <- paste0(floor(stand_st$QM_DBH), '"')
-stocking         <- NA                    # where should this live? stand?
+stocking         <- stocking_pct
 canopy_height    <- paste0(round(age_fixed_st$OV_HT/5)*5, "'")    # nearest 5 ft
 canopy_closure   <- paste0(round(age_fixed_st$OV_CLSR, -1), "%")  # nearest 10 %
-hard_mast_tpa    <- floor(sum(species_hard_mast$AV_TPA))
-hard_mast_ba     <- floor(sum(species_hard_mast$AV_BA))
+hard_mast_tpa    <- dplyr::if_else(hard_mast_tpa_sum > 0 & hard_mast_tpa_sum < 1,
+                                   "<1", 
+                                   as.character(floor(hard_mast_tpa_sum)), "0")
+hard_mast_ba     <- dplyr::if_else(hard_mast_ba_sum > 0 & hard_mast_ba_sum < 1,
+                                   "<1", 
+                                   as.character(floor(hard_mast_ba_sum)), "0")
 hard_mast_qm_dbh <- paste0(floor(hard_mast_QM_DBH), '"')
-hard_mast_stock  <- NA                    
-under_height     <- paste0(round(age_fixed_st$UND_HT, 2), "'")
-snag_tpa         <- floor(stand_st$SNAG_TPA)
+hard_mast_stock  <- hm_stocking_pct                    
+under_height     <- paste0(round(age_fixed_st$UND_HT, 0), "'")
+snag_tpa         <- ifelse(stand_st$SNAG_TPA > 0 & stand_st$SNAG_TPA < 1, "<1",                                floor(stand_st$SNAG_TPA))
 stand_age        <- floor(age_fixed_st$TR_AGE)
 hard_mast_age    <- mean(age_hard_mast$AGE_ORIG)
 growth           <- floor(mean(age_pts_st$AGE_GRW))
 stand_health     <- health_sort[1,]$TR_HLTH
 species_rich     <- species_richness
-regen_rate       <- floor(age_fixed_st$UND_COV)
+regen_rate       <- ifelse(age_fixed_st$UND_COV > 0 & age_fixed_st$UND_COV < 1,
+                           "<1", floor(age_fixed_st$UND_COV))
 
-# Size Class Distribution (TPA)
-polesize         <- floor(stand_st$POL_TPA)
-sawtimber        <- floor(stand_st$SAW_TPA)
-mature           <- floor(stand_st$MAT_TPA)
-overmature       <- floor(stand_st$OVM_TPA)
+# Size Class
+sapling_tpa      <- NA                                    # added in the future
+polesize_tpa     <- floor(stand_st$POL_TPA)
+sawtimber_tpa    <- floor(stand_st$SAW_TPA)
+mature_tpa       <- floor(stand_st$MAT_TPA)
+overmature_tpa   <- floor(stand_st$OVM_TPA)
+sapling_ba       <- NA                                    # added in the future
+polesize_ba      <- NA                                    # added in the future
+sawtimber_ba     <- NA                                    # added in the future
+mature_ba        <- NA                                    # added in the future
+overmature_ba    <- NA                                    # added in the future
 
 # Top 3 Understory Species
 under_species_1 <- understory_species_count$UND[1]
@@ -259,32 +308,46 @@ ground_species_3 <- ground_species_count$GRD[3]
 
 # Top 5 Overstory Species
 o1_usda_code  <- species_sort[1,]$TR_SP
-o1_avg_tpa    <- floor(species_sort[1,]$AV_TPA)
-o1_avg_ba     <- floor(species_sort[1,]$AV_BA)
+o1_avg_tpa    <- ifelse(species_sort[1,]$AV_TPA > 0 & species_sort[1,]$AV_TPA < 1,
+                           "<1", floor(species_sort[1,]$AV_TPA))
+o1_avg_ba     <- ifelse(species_sort[1,]$AV_BA > 0 & species_sort[1,]$AV_BA < 1,
+                           "<1", floor(species_sort[1,]$AV_BA))
 o1_qm_dbh     <- paste0(floor(species_sort[1,]$QM_DBH), '"')
 o1_target_tpa <- ""                         
 o1_target_ba  <- ""
+
 o2_usda_code  <- species_sort[2,]$TR_SP
-o2_avg_tpa    <- floor(species_sort[2,]$AV_TPA)
-o2_avg_ba     <- floor(species_sort[2,]$AV_BA)
+o2_avg_tpa    <- ifelse(species_sort[2,]$AV_TPA > 0 & species_sort[2,]$AV_TPA < 1,
+                           "<1", floor(species_sort[2,]$AV_TPA))
+o2_avg_ba     <- ifelse(species_sort[2,]$AV_BA > 0 & species_sort[2,]$AV_BA < 1,
+                           "<1", floor(species_sort[2,]$AV_BA))
 o2_qm_dbh     <- paste0(floor(species_sort[2,]$QM_DBH), '"')
 o2_target_tpa <- ""
 o2_target_ba  <- ""
+
 o3_usda_code  <- species_sort[3,]$TR_SP
-o3_avg_tpa    <- floor(species_sort[3,]$AV_TPA)
-o3_avg_ba     <- floor(species_sort[3,]$AV_BA)
+o3_avg_tpa    <- ifelse(species_sort[3,]$AV_TPA > 0 & species_sort[3,]$AV_TPA < 1,
+                           "<1", floor(species_sort[3,]$AV_TPA))
+o3_avg_ba     <- ifelse(species_sort[3,]$AV_BA > 0 & species_sort[3,]$AV_BA < 1,
+                           "<1", floor(species_sort[3,]$AV_BA))
 o3_qm_dbh     <- paste0(floor(species_sort[3,]$QM_DBH), '"')
 o3_target_tpa <- ""
 o3_target_ba  <- ""
+
 o4_usda_code  <- species_sort[4,]$TR_SP
-o4_avg_tpa    <- floor(species_sort[4,]$AV_TPA)
-o4_avg_ba     <- floor(species_sort[4,]$AV_BA)
+o4_avg_tpa    <- ifelse(species_sort[4,]$AV_TPA > 0 & species_sort[4,]$AV_TPA < 1,
+                           "<1", floor(species_sort[4,]$AV_TPA))
+o4_avg_ba     <- ifelse(species_sort[4,]$AV_BA > 0 & species_sort[4,]$AV_BA < 1,
+                           "<1", floor(species_sort[4,]$AV_BA))
 o4_qm_dbh     <- paste0(floor(species_sort[4,]$QM_DBH), '"')
 o4_target_tpa <- ""
 o4_target_ba  <- ""
+
 o5_usda_code  <- species_sort[5,]$TR_SP
-o5_avg_tpa    <- floor(species_sort[5,]$AV_TPA)
-o5_avg_ba     <- floor(species_sort[5,]$AV_BA)
+o5_avg_tpa    <- ifelse(species_sort[5,]$AV_TPA > 0 & species_sort[5,]$AV_TPA < 1,
+                           "<1", floor(species_sort[5,]$AV_TPA))
+o5_avg_ba     <- ifelse(species_sort[5,]$AV_BA > 0 & species_sort[5,]$AV_BA < 1,
+                           "<1", floor(species_sort[5,]$AV_BA))
 o5_qm_dbh     <- paste0(floor(species_sort[5,]$QM_DBH),'"')
 o5_target_tpa <- ""
 o5_target_ba  <- ""
@@ -496,39 +559,69 @@ Regeneration Rate
 -->
 
 :::::::::::: {#section-3 .group-3-horz}
-:::::::: {.section-box}
-### Size Class Distribution (TPA)
 
-::::: {.grid-2w-4h}
+:::::::: {.section-box}
+## Size Class
+::::: {.grid-3w-5h}
 ::: {.var-name}
-Polesize (8"-12")
+Class
+:::
+::: {.var-name}
+TPA
+:::
+::: {.var-name}
+BA
+:::
+::: {.var-name}
+Sapling (1"-5")
 :::
 ::: {.var-value}
-`r polesize`
+`r sapling_tpa`
+:::
+::: {.var-value}
+`r sapling_ba`
+:::
+::: {.var-name}
+Polesize (5"-12")
+:::
+::: {.var-value}
+`r polesize_tpa`
+:::
+::: {.var-value}
+`r polesize_ba`
 :::
 ::: {.var-name}
 Sawtimber (12"-18")
 :::
 ::: {.var-value}
-`r sawtimber`
+`r sawtimber_tpa`
+:::
+::: {.var-value}
+`r sawtimber_ba`
 :::
 ::: {.var-name}
 Mature (18"-24")
 :::
 ::: {.var-value}
-`r mature`
+`r mature_tpa`
+:::
+::: {.var-value}
+`r mature_ba`
 :::
 ::: {.var-name}
 Overmature (24"+)
 :::
 ::: {.var-value}
-`r overmature`
+`r overmature_tpa`
+:::
+::: {.var-value}
+`r overmature_ba`
 :::
 :::::
 ::::::::
-:::::::: {.section-box}
-### Top 3 Understory Species
 
+:::::::: {.section-box}
+## Top 3 Understory
 ::::: {.grid-2w-4h}
 ::: {.var-name}
 Species 1
@@ -550,9 +643,9 @@ Species 3
 :::
 :::::
 ::::::::
-:::::::: {.section-box}
-### Top 3 Ground Species
 
+:::::::: {.section-box}
+## Top 3 Ground
 ::::: {.grid-2w-4h}
 ::: {.var-name}
 Species 1
@@ -583,7 +676,7 @@ Species 3
 -->
 
 :::::::::::: {#section-4 .group-5-vert}
-### Top 5 Overstory Species
+## Top 5 Overstory
 
 <!-- Overstory Species 1 -->
 :::::::: {.section-box}

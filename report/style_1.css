@@ -1,13 +1,24 @@
+h1.title {
+  font-size: 30px;
+  margin-top: 0px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-top: 10px;
+}
+
 .empty-box {
-  height: 30px;
+  height: 20px;
   width: 200px;
-  padding: 5px;
+  padding: 2px;
   border-radius: 2px;
+  border: 1px solid #C0C0C0;
   background-color: #C0C0C0;
 }
 
 .var-name {
-  font-size: 1.1em;
+  font-size: 0.8em;
   color: #000000;
   text-align: left;
   font-weight: bold;
@@ -15,37 +26,42 @@
 }
 
 .var-value {
+  font-size: 0.8em;
   color: #303030;
   text-align: left;
-  padding: 5px;
+  padding: 1px;
   border-radius: 2px;
+  border: 1px solid #C0C0C0;
   background-color: #C0C0C0;
 }
 
 .section-box {
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
   box-sizing: border-box;
+  border: 1px solid #F5F5F5;
   background-color: #F5F5F5;
 }
 
 .grid-5w-1h {
   display: grid;
   grid-template-columns: repeat(5, auto auto);
-  grid-gap: 10px;
+  grid-template-rows: 20px;
+  grid-auto-flow: column;
+  grid-gap: 5px;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
   box-sizing: border-box;  
 }
 
 .grid-5w-2h {
   display: grid;
   grid-template-columns: repeat(5, auto);
-  grid-template-rows: 10px 30px;
+  grid-template-rows: 10px 20px;
   grid-auto-flow: column;
   grid-gap: 10px;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
   box-sizing: border-box;
   background-color: #F5F5F5;
 }
@@ -53,9 +69,9 @@
 .grid-6w-6h {
   display: grid;
   grid-template-columns: repeat(6, auto);
-  grid-template-rows: repeat(3, 10px 30px);
+  grid-template-rows: repeat(3, 15px 20px);
   grid-auto-flow: column;
-  grid-gap: 10px;
+  grid-gap: 2px;
   border-radius: 5px;
   padding: 5px;
   box-sizing: border-box;
@@ -86,9 +102,9 @@
 .grid-6w-2h {
   display: grid;
   grid-template-columns: repeat(6, auto);
-  grid-template-rows: 10px 30px;
+  grid-template-rows: 10px 20px;
   grid-auto-flow: column;
-  grid-gap: 10px;
+  grid-gap: 5px;
   border-radius: 5px;
   padding: 5px;
   box-sizing: border-box;
@@ -97,7 +113,17 @@
 .grid-2w-4h {
   display: grid;
   grid-template-columns: auto auto;
-  grid-template-rows: 30px 30px;
+  grid-template-rows: repeat(3, 20px);
+  grid-gap: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.grid-3w-5h {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: repeat(5, 20px);
   grid-gap: 5px;
   border-radius: 5px;
   padding: 5px;
