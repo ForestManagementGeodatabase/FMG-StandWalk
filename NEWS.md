@@ -1,3 +1,11 @@
+# Updates 7/9/2020
+* Added the stocking calculations (stand and hard mast) to the report.
+* Adjusted grid sizing to ensure everything fits on one page using the browser's (Chrome, Firefox) print to pdf capability. 
+* Added the "Sapling" class to the "Size Class" section. 
+* Added the "BA" column to the "Size Class" section. 
+* Added ">1" notation to requested fields. 
+
+
 # Updates 6/10/2020
 * Added the FMG point feature classes `AGE`, `FIXED`, and `PRISM` as parameters to  calculate metrics not currently summarized by the FMG summary tables. 
 * Added the "Top 3 Understory Species". 
@@ -40,3 +48,4 @@
 * This report has been developed as an rmarkdown document to take advantage of Pandoc's new [`fenced_div`](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html) capability. This allows the report data to be semantically arranged in the source document while the output display is styled using `.css` for `.html` output and `.tex` for `.pdf` output. 
 * For `.html` output, this report uses the `.css` `grid` framework to define the layout the report. The CSS Grid Layout module is a technique in Cascading Style Sheets that allows web developers to create complex responsive web design layouts more easily and consistently across browsers.
 * For `.pdf` output, this report does not currently contain any `.tex` code to style the report. To support `.pdf` output, this would require an entirely separate codebase in `.tex` format to mimic the current `.css`-based report layout. Therefore during development, it is recommended to only support the `.html` output version, at least until development of the report has matured. Once the report format has matured, a `.pdf` version could be developed if it is deemed necessary. This would prevent unnecessary duplication of effort during development. 
+
