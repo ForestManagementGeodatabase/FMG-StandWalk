@@ -1,14 +1,21 @@
+<img src="docs/images/FMG-hex_3.png" width=250 align="right" />
+
 # FMG-StandWalk 
-An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Reports. <img src="docs/images/HDQLO-03_h120.jpg" align="right" />
+An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Reports. 
 
 ## Description
 The purpose of this report is to automate the production of the reports needed by foresters to conduct the "Stand Walk Recon" task. The purpose of a Stand Walk Recon is to assess the current condition of a given forest stand using the forest survey data recorded in the FMG, and from this information, to develop a "Stand Prescription" that will define its management in the coming years. 
 
 The "Stand Walk Recon" task is composed of two elements:
+
 * **Stand Summary** - A sheet summarizing the FMG field survey data for a given stand. Foresters need to consult the summary statistics on this sheet to help record decisions on the next sheet. 
 * **Stand Prescription** - A sheet used by a forester to record their assessment of what management actions should be taken for a given stand. 
 
+
+<img src="docs/images/HDQLO-03_h120.jpg" align="right" />
+
 ## Funding
+
 Funding for the development and maintenance of the Forest Management Geodatabase (FMG) has been provided by USACE Rock Island District, Operations Division, Mississippi River Project, Natural Resources. 
 
 ## Latest Updates
