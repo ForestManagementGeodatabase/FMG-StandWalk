@@ -120,10 +120,10 @@ h2 {
   box-sizing: border-box;
 }
 
-.grid-3w-5h {
+.grid-3w-6h {
   display: grid;
   grid-template-columns: auto auto auto;
-  grid-template-rows: repeat(5, 20px);
+  grid-template-rows: repeat(6, 20px);
   grid-gap: 5px;
   border-radius: 5px;
   padding: 5px;

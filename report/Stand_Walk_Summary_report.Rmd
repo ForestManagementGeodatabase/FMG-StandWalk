@@ -562,7 +562,7 @@ Regeneration Rate
 
 :::::::: {.section-box}
 ## Size Class
-::::: {.grid-3w-5h}
+::::: {.grid-3w-6h}
 ::: {.var-name}
 Class
 :::
