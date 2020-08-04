@@ -4,7 +4,10 @@
 An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Reports. 
 
 ## Description
-The purpose of this report is to automate the production of the reports needed by foresters to conduct the "Stand Walk Recon" task. The purpose of a Stand Walk Recon is to assess the current condition of a given forest stand using the forest survey data recorded in the FMG, and from this information, to develop a "Stand Prescription" that will define its management in the coming years. 
+
+<img src="docs/images/python_r_toolbox.png" width=125 align="left"  />
+
+The FMG Stand Walk ArcGIS toolbox is a Python/R toolbox used to automate the production of the reports needed by foresters to conduct the "Stand Walk Recon" task. The purpose of a Stand Walk Recon is to assess the current condition of a given forest stand using the forest survey data recorded in the FMG, and from this information, to develop a "Stand Prescription" that will define its management in the coming years. 
 
 The "Stand Walk Recon" task is composed of two elements:
 
@@ -32,7 +35,7 @@ Use this link to preview the stand reports for the Mississippi River Pool 21 Pec
 [https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/)
 
 ## Design
-This ArcGIS toolbox contains a set of `R` scripts that import a set of standard FMG geospatial datasets and produce a set of forest stand summary reports. These reports are built using R Markdown, that is introduced [here](https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F) and described in detail [here](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html). This approach makes available the advanced data science and reporting capabilities of `R` within USACE's enterprise GIS software, ArcGIS Pro and ArcMap. 
+This [ArcGIS toolbox](https://pro.arcgis.com/en/pro-app/help/analysis/geoprocessing/basics/use-a-custom-geoprocessing-tool.htm) contains a set of [`R`](https://cran.r-project.org/) scripts that import a set of standard FMG geospatial datasets and produce a set of forest stand summary reports. These reports are built using [R Markdown](https://rmarkdown.rstudio.com/), that is introduced [here](https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F) and described in detail [here](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html). This approach makes available the advanced data science and reporting capabilities of `R` within USACE's enterprise GIS software, ArcGIS Pro and ArcMap. 
 
 ## Install
 Use the following instructions to start running the reports. This toolbox requires the user to install `R`, `RStudio`, `ArcGIS Pro`, and optionally, `ArcMap`.
@@ -67,5 +70,17 @@ The code in this repository contains all of the files needed to use this ArcGIS 
 * Unzip the archive to your project folder. 
 * In `ArcMap` or `ArcGIS Pro`, navigate to the folder where you just unzipped the archive and you are ready to use the `StandWalk` ArcGIS toolbox. 
 
-## Test Data
-The functionality of this toolbox can be tested using the data provided in the `FMG_StandWalk/test` folder. In the test folder you will find a series of sites where the FMG forestry surveys have been conducted. These geodatabases contain the QA'd data necessary to produce a Stand Walk Summary report. 
+## Getting Started
+Open either ESRI ArcGIS Pro or ArcMap. Navigate to the folder where you unzipped the `FMG-StandWalk` zip file and open the `StandWalk.tbx` ArcGIS toolbox. 
+
+### Running the Stand Walk Reports
+Follow the standard FMG instructions for collecting FMG field data, QA/QC the data, and summarize the data. These steps must be completed first to prepare the data to produce the Stand Walk reports. 
+
+* Open the `Stand Walk Summary` tool. 
+* Add the "stand" polygon feature class (either FMG `Site` or `Stand` level polygons) used to summarize plot data to the tool. 
+* Add the FMG plot point feature classes to the tool. 
+* Add the FMG summary tables to the tool.
+* Run the tool. The reports will be written to the parent folder of the geodatabase used for the input FMG data. 
+
+### Test Data
+The functionality of this toolbox can be tested using the data provided in the `FMG_StandWalk/test` folder. In the test folder you will find a series of projects where the FMG forestry surveys have been conducted. These geodatabases contain the QA'd data necessary to produce a Stand Walk Summary report. 
