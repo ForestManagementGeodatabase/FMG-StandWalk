@@ -18,8 +18,14 @@
 load_packages <- function(need_pkgs) {
   # Determine the uninstalled packages from need_pkgs
   uninst_pkgs <- need_pkgs[!(need_pkgs %in% installed.packages()[, "Package"])]
+  
   # Install uninstalled packages
-  if (length(uninst_pkgs)) install.packages(uninst_pkgs, dependencies = TRUE)
+  if (length(uninst_pkgs)) {
+    install.packages(uninst_pkgs, 
+                     repos = "https://cran.r-project.org",
+                     dependencies = TRUE)
+  }
+  
   # Load all needed packages
   lapply(need_pkgs, require, character.only = TRUE)
 }
@@ -125,19 +131,6 @@ compare_params <- function(in_params, param_list) {
 }
 
 
-#' @title Convert Windows path to forward slashes
-#' 
-#' @description Convert a Windows file path from double backslashes to single 
-#' forward slash file seperators suitable for use in R. 
-#' 
-#' @param path        character; A windows file path containing escaped 
-#'                    backslashs (i.e., \\)
-#' 
-forward_slash <- function(path) {
-  path <- gsub("\\\\", "/", path)
-}
-
-
 #' @title Converts FMG unique identifier to the current standard
 #' 
 #' @description Converts the FMG unique identifier fileds to the current 
@@ -164,6 +157,7 @@ fix_fmg_id <- function(df) {
   }
   return(df)
 }
+
 
 #' @title Convert missing data to NA
 #' 
