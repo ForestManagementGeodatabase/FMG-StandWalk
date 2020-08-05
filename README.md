@@ -82,7 +82,8 @@ The `arcgisbinding` `R` package is developed and maintained by ESRI to support t
 ### Download the toolbox
 The code in the FMG-StandWalk repository contains all of the files needed to use this ArcGIS toolbox. 
 
-* Use the green "Clone or download" button above to download a ZIP archive of the toolbox. 
+* In the "Releases" section above on the right side of the page, click the green "latest" link. 
+* On the latest release page, use the "Source code (zip)" link to download a ZIP archive of the toolbox. 
 * Unzip the archive to your project folder. 
 * In `ArcMap` or `ArcGIS Pro`, navigate to the folder where you just unzipped the archive and you are ready to use the `StandWalk` ArcGIS toolbox. 
 
