@@ -1,3 +1,22 @@
+# FMG-StandWalk v0.1.5 (8/5/2020)
+
+## Major Changes
+* Upgraded the install process to insure required R packages are installed. 
+
+## Compatibility Matrix
+Please follow the compatibility matrix below to determine the required combination of software components necessary to run the toolbox. 
+
+Software        |Suported  |Not Supported
+---             |---       |---          
+ArcGIS Pro      |2.5       |2.5          
+ArcMap          |10.7      |10.8         
+R               |3.6       |![](https://img.shields.io/badge/-4.0-red)          
+R-bridge        |1.0.1.239 |![](https://img.shields.io/badge/-1.0.1.241-red)  
+FluvialGeomorph |0.1.35    |0.1.35             
+
+*Note: The ArcGIS R-bridge does not yet support R 4.0 for use in ArcGIS Pro or ArcMap geoprocessing tools. *
+
+
 # Updates 7/9/2020
 * Added the stocking calculations (stand and hard mast) to the report.
 * Adjusted grid sizing to ensure everything fits on one page using the browser's (Chrome, Firefox) print to pdf capability. 

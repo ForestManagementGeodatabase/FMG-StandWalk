@@ -3,6 +3,13 @@
 # FMG-StandWalk 
 An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Reports. 
 
+## Project Status
+[![Maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle)
+[![Project Status: Active The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![version](https://img.shields.io/badge/Version-0.1.5-orange.svg?style=flat-square)](commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2020--08--05-yellowgreen.svg)](/commits/master)
+[![Licence](https://img.shields.io/badge/licence-CC0-blue.svg)](http://choosealicense.com/licenses/cc0-1.0/)
+
 ## Description
 
 <img src="docs/images/python_r_toolbox.png" width=125 align="left"  />
@@ -18,7 +25,6 @@ The "Stand Walk Recon" task is composed of two elements:
 <img src="docs/images/HDQLO-03_h120.jpg" align="right" />
 
 ## Funding
-
 Funding for the development and maintenance of the Forest Management Geodatabase (FMG) has been provided by USACE Rock Island District, Operations Division, Mississippi River Project, Natural Resources. 
 
 ## Latest Updates
@@ -55,17 +61,27 @@ Use the following instructions to start running the reports. This toolbox requir
 * Ensure that `ArcGIS Pro` is installed. 
 * `ArcGIS Pro` version 2.5 or greater is recommended. 
 
-### Install `arcgisbinding`
-The `arcgisbinding` `R` package is developed and maintained by ESRI to support import and export of GIS data into `R`. 
+### Download the `arcgisbinding` package
+The `arcgisbinding` `R` package allows `ArcGIS Pro` and `ArcMap` to read and write to R. Installing it through `ArcGIS Pro` also enables it for use in `ArcMap` as well. *Note: The ArcGIS R-bridge does not yet support R 4.0 for use in ArcGIS Pro or ArcMap geoprocessing tools.* See the [NEWS](NEWS.md) for more details on version compatibility. Please manually download the specified version using these instructions. 
+
+* Navigate to the following URL: [https://github.com/R-ArcGIS/r-bridge](https://github.com/R-ArcGIS/r-bridge)
+* In the "Releases" section on the middle-right side of the page, click the "+ xx releases" link. 
+* Download the `v1.0.1.239` version. This file is named:  `arcgisbinding_1.0.1.239.zip`
+* Note the location of the file you just downloaded. We will use it in a following step.
+
+### Install the `arcgisbinding` package
+The `arcgisbinding` `R` package is developed and maintained by ESRI to support the import and export of GIS data into `R`. 
+
 * In `ArcGIS Pro`, on the top menu, click "Project", and click "Options" on the left menu.
 * In the "Options" dialog box, click "Geoprocessing" on the left menu. 
 * On the "Geoprocessing" page, scroll down to the "R-ArcGIS Support" section.
 * In the "R-ArcGIS Support" section, verify the installed `R` version for ArcGIS to use.
-* Below the "Detected R home directories" drop-down menu, you will see the `arcgisbinding` package section. From the drop-down, choose the "Check for package updates" option. If needed, install the latest package version. 
-* This `R` package allows `ArcGIS Pro` and `ArcMap` to read and write to R. Installing it through `ArcGIS Pro` also enables it for use in `ArcMap` as well. 
+* Select an `R` version in the 3.6.x series.  
+* Below the "Detected R home directories" drop-down menu, you will see the `arcgisbinding` package section. From the drop-down, choose the "Update from file" option. Navigate to the `arcgisbinding_1.0.1.239.zip` file you downloaded in an earlier step and click the OK button. 
 
 ### Download the toolbox
-The code in this repository contains all of the files needed to use this ArcGIS toolbox. 
+The code in the FMG-StandWalk repository contains all of the files needed to use this ArcGIS toolbox. 
+
 * Use the green "Clone or download" button above to download a ZIP archive of the toolbox. 
 * Unzip the archive to your project folder. 
 * In `ArcMap` or `ArcGIS Pro`, navigate to the folder where you just unzipped the archive and you are ready to use the `StandWalk` ArcGIS toolbox. 
