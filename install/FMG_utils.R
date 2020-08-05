@@ -1,33 +1,105 @@
-# Utility R functions for the ArcGIS FMG toolbox. 
+# Utility R functions for the ArcGIS FluvialGeomorph toolbox. 
 
-#' @title Install and load needed packages
+#' @title Load needed packages
 #' 
-#' @description Tests if packages are installed and if not installs them. Once
-#'     packages are installed it loads them. 
+#' @description Loads specified packages. 
 #' 
 #' @export
 #' @param need_pkgs      A character vector of package names.
 #' 
-#' @return Installs and loads the requested packages.
-#' 
-#' @details Replaces the `pacman::p_load` function that requires the latest R 
-#'     version. This function uses only base R functions. This function only 
-#'     installs packages from the currently set repositories (e.g., CRAN, 
-#'     CRANextra). 
+#' @return Loads the requested packages.
 #' 
 load_packages <- function(need_pkgs) {
+  # Load all needed packages
+  lapply(need_pkgs, require, character.only = TRUE)
+}
+
+
+#' @title Install needed packages
+#' 
+#' @description Tests if packages are installed and if not installs them.
+#' 
+#' @export
+#' @param need_pkgs      A character vector of package names.
+#' 
+#' @return Installs the requested packages.
+#' 
+install_needed_packages <- function(need_pkgs) {
+  # Set CRAN repository
+  message("Setting CRAN repository...")
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.rstudio.com/"
+  options(repos = r)
+  
+  # Don't compile from source
+  #options(install.packages.check.source = "no")
+  
+  # Update existing packages
+  message("Updating packages...")
+  update.packages(lib.loc = .libPaths()[1], 
+                  ask = FALSE, 
+                  checkBuilt = TRUE,
+                  type = "win.binary")
+  
   # Determine the uninstalled packages from need_pkgs
   uninst_pkgs <- need_pkgs[!(need_pkgs %in% installed.packages()[, "Package"])]
   
   # Install uninstalled packages
   if (length(uninst_pkgs)) {
+    message("Installing missing packages...")
     install.packages(uninst_pkgs, 
-                     repos = "https://cran.r-project.org",
-                     dependencies = TRUE)
+                     Ncpus = 5,
+                     dependencies = TRUE,
+                     type = "win.binary")
+  }
+}
+
+
+#' @title Install FluvialGeomorph R packages
+#' 
+#' @description Installs the required R packages for the ArcGIS FluvialGeomorph
+#'     toolbox. 
+#' 
+#' @export
+#' @param force      logical; Force installation? Defaults to FALSE.
+#'  
+#' @return Installs the required ArcGIS FluvialGeomorph R packages. 
+#' 
+#' @details This function installs the \code{RegionalCurve} R package from 
+#'     GitHub and the \code{fluvgeo} R package from a local source tarball. 
+#' 
+install_fluvgeo_packages <- function(force = FALSE) {
+  # Install remotes
+  if (!require("remotes")) { 
+    install.packages("remotes", dependencies = TRUE)
+    if ("remotes" %in% rownames(installed.packages()) == TRUE) {
+      message("The `remotes` package was installed.")
+    }
   }
   
-  # Load all needed packages
-  lapply(need_pkgs, require, character.only = TRUE)
+  # Install `RegionalCurve` from GitHub
+  message("Installing RegionaCurve from GitHub...")
+  remotes::install_github(repo = "FluvialGeomorph/RegionalCurve",
+                          force = force,
+                          upgrade = TRUE,
+                          dependencies = TRUE,
+                          type = "win.binary")
+  
+  # Install facet_scales from GitHub
+  message("Installing facetscales from GitHub...")
+  remotes::install_github(repo = "zeehio/facetscales",
+                          force = force,
+                          upgrade = TRUE,
+                          dependencies = TRUE,
+                          type = "win.binary")
+  
+  # Install `fluvgeo` from from GitHub
+  message("Installing fluvgeo from GitHub...")
+  remotes::install_github(repo = "FluvialGeomorph/fluvgeo@*release",
+                          force = force,
+                          upgrade = TRUE, 
+                          dependencies = TRUE,
+                          type = "win.binary")
 }
 
 
@@ -55,6 +127,10 @@ set_pandoc <- function() {
   } else {
     message("pandoc installation not detected.")
   }
+  
+  # Determine if pandoc is available
+  message(paste("Pandoc available: ", rmarkdown::pandoc_available()))
+  
 }
 
 
@@ -129,7 +205,6 @@ compare_params <- function(in_params, param_list) {
   # param_table <- merge(params_esri, params_r, 
   #                      by = "param_name")
 }
-
 
 #' @title Converts FMG unique identifier to the current standard
 #' 

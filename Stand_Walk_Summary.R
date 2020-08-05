@@ -30,12 +30,19 @@ tool_exec <- function(in_params, out_params) {
   fmg_install <- file.path(dir_name, "install")
   source(file.path(fmg_install, "FMG_utils.R"))
   
-  # Set pandoc path
-  set_pandoc()
+  # Install needed packages
+  message("Installing needed pacakges...")
+  needed_pkgs <- c("dplyr", "tibble", "stringr", "lubridate", "tidyr", "sf", 
+                   "units")
+  install_needed_packages(needed_pkgs)
   
   # Load required libraries
-  load_packages(c("dplyr", "tibble", "stringr", "lubridate", "tidyr", "sf", 
-                  "units"))
+  message("Loading needed packages...")
+  load_packages(needed_pkgs)
+  
+  # Ensure pandoc can be found
+  message("Setting pandoc directory...")
+  set_pandoc()
   
   # gp tool parameters
   stand_polys               <- in_params[[1]]
