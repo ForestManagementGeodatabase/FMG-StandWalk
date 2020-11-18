@@ -7,7 +7,7 @@ An ArcGIS toolbox that creates Forest Management Geodatabase (FMG) Stand Walk Re
 [![Maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle)
 [![Project Status: Active The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![version](https://img.shields.io/badge/Version-0.1.5-orange.svg?style=flat-square)](commits/master)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2020--08--05-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2020--11--18-yellowgreen.svg)](/commits/master)
 [![Licence](https://img.shields.io/badge/licence-CC0-blue.svg)](http://choosealicense.com/licenses/cc0-1.0/)
 
 ## Description
@@ -38,7 +38,7 @@ Check out the [NEWS](NEWS.md) for details on the latest updates.
 
 ## Preview Reports
 Use this link to preview the stand reports for the Mississippi River Pool 21 Pecan Grove test data:
-[https://mpdougherty.github.io/FMG-StandWalk/](https://mpdougherty.github.io/FMG-StandWalk/). You can reproduce these reports following the instructions in the Getting Started section below. 
+[https://forestmanagementgeodatabase.github.io/FMG-StandWalk/index.html](https://forestmanagementgeodatabase.github.io/FMG-StandWalk/index.html). You can reproduce these reports following the instructions in the Getting Started section below. 
 
 ## Design
 This [ArcGIS toolbox](https://pro.arcgis.com/en/pro-app/help/analysis/geoprocessing/basics/use-a-custom-geoprocessing-tool.htm) contains a set of [`R`](https://cran.r-project.org/) scripts that import a set of standard FMG geospatial datasets and produce a set of forest stand summary reports. These reports are built using [R Markdown](https://rmarkdown.rstudio.com/), that is introduced [here](https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F) and described in detail [here](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html). This approach makes available the advanced data science and reporting capabilities of `R` within USACE's enterprise GIS software, ArcGIS Pro and ArcMap. 

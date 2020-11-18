@@ -1,3 +1,7 @@
+# FMG-StandWalk (11/18/2020)
+
+* Moved FMG-StandWalk to new github organization [github.com/ForestManagementGeodatabase](https://github.com/ForestManagementGeodatabase). 
+
 # FMG-StandWalk v0.1.5 (8/5/2020)
 
 ## Major Changes
