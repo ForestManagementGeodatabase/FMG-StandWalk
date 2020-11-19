@@ -1,6 +1,24 @@
-# FMG-StandWalk (11/18/2020)
+# FMG-StandWalk v0.1.6 (11/19/2020)
 
+## Major Changes
 * Moved FMG-StandWalk to new github organization [github.com/ForestManagementGeodatabase](https://github.com/ForestManagementGeodatabase). 
+* Added Pool 12 Forestry test data. 
+* Updated example reports to use the new Pool 12 Forestry surveys. 
+
+## Bug Fixes
+* Updated field name cleaning function to address wild caught dataset field names.
+
+## Compatibility Matrix
+Please follow the compatibility matrix below to determine the required combination of software components necessary to run the toolbox. 
+
+Software        |Suported  |Not Supported
+---             |---       |---          
+ArcGIS Pro      |2.6       |2.6          
+ArcMap          |10.8      |10.8         
+R               |3.6       |![](https://img.shields.io/badge/-4.0-red)          
+R-bridge        |1.0.1.239 |![](https://img.shields.io/badge/-1.0.1.243-red)  
+FMG-StandWalk   |0.1.6     |0.1.6             
+
 
 # FMG-StandWalk v0.1.5 (8/5/2020)
 
@@ -16,7 +34,7 @@ ArcGIS Pro      |2.5       |2.5
 ArcMap          |10.7      |10.8         
 R               |3.6       |![](https://img.shields.io/badge/-4.0-red)          
 R-bridge        |1.0.1.239 |![](https://img.shields.io/badge/-1.0.1.241-red)  
-FluvialGeomorph |0.1.35    |0.1.35             
+FMG-StandWalk   |0.1.5     |0.1.5             
 
 *Note: The ArcGIS R-bridge does not yet support R 4.0 for use in ArcGIS Pro or ArcMap geoprocessing tools. *
 
