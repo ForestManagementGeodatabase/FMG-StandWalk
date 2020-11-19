@@ -88,7 +88,7 @@ tool_exec <- function(in_params, out_params) {
     dir.create(report_dir)
   }
   
-  # Convert the geodatabase freature class and tables to data frames
+  # Convert the geodatabase feature class and tables to data frames
   gdb <- dirname(age_fixed_summary_tbl)
   message("Reading data sources...")
   stand_polys_sf    <- sf::st_read(dsn = gdb,
