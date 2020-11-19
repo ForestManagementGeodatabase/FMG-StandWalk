@@ -230,6 +230,14 @@ fix_fmg_id <- function(df) {
     df$Site_ID <- df$SITE_ID
     df <- dplyr::select(df, -SITE_ID)
   }
+  if("SITEID" %in% colnames(df)) {
+    df$Site_ID <- df$SITEID
+    df <- dplyr::select(df, -SITEID)
+  }
+  if("SiteID" %in% colnames(df)) {
+    df$Site_ID <- df$SiteID
+    df <- dplyr::select(df, -SiteID)
+  }
   return(df)
 }
 
