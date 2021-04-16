@@ -55,54 +55,6 @@ install_needed_packages <- function(need_pkgs) {
 }
 
 
-#' @title Install FluvialGeomorph R packages
-#' 
-#' @description Installs the required R packages for the ArcGIS FluvialGeomorph
-#'     toolbox. 
-#' 
-#' @export
-#' @param force      logical; Force installation? Defaults to FALSE.
-#'  
-#' @return Installs the required ArcGIS FluvialGeomorph R packages. 
-#' 
-#' @details This function installs the \code{RegionalCurve} R package from 
-#'     GitHub and the \code{fluvgeo} R package from a local source tarball. 
-#' 
-install_fluvgeo_packages <- function(force = FALSE) {
-  # Install remotes
-  if (!require("remotes")) { 
-    install.packages("remotes", dependencies = TRUE)
-    if ("remotes" %in% rownames(installed.packages()) == TRUE) {
-      message("The `remotes` package was installed.")
-    }
-  }
-  
-  # Install `RegionalCurve` from GitHub
-  message("Installing RegionaCurve from GitHub...")
-  remotes::install_github(repo = "FluvialGeomorph/RegionalCurve",
-                          force = force,
-                          upgrade = TRUE,
-                          dependencies = TRUE,
-                          type = "win.binary")
-  
-  # Install facet_scales from GitHub
-  message("Installing facetscales from GitHub...")
-  remotes::install_github(repo = "zeehio/facetscales",
-                          force = force,
-                          upgrade = TRUE,
-                          dependencies = TRUE,
-                          type = "win.binary")
-  
-  # Install `fluvgeo` from from GitHub
-  message("Installing fluvgeo from GitHub...")
-  remotes::install_github(repo = "FluvialGeomorph/fluvgeo@*release",
-                          force = force,
-                          upgrade = TRUE, 
-                          dependencies = TRUE,
-                          type = "win.binary")
-}
-
-
 #' @title Set pandoc path
 #' 
 #' @export
