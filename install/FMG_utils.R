@@ -160,20 +160,19 @@ compare_params <- function(in_params, param_list) {
 
 #' @title Converts FMG unique identifier to the current standard
 #' 
-#' @description Converts the FMG unique identifier fileds to the current 
+#' @description Converts the FMG unique identifier fields to the current 
 #' standard from any variant that has been in use over the life of the project.
 #' 
 #' @param df    data frame; A FMG data frame. 
 #' 
-#' @details The current requirement for the unique id is `Site_ID`
+#' @details The current requirement for the stand unique id is `Site_ID`. 
+#' The current requirement for the plot point unique id is `PLOT`. 
 #' 
 #' @return A FMG data frame with the currently used unique identifier field 
 #' names.
 #' 
 fix_fmg_id <- function(df) {
-  if("Site_ID" %in% colnames(df)) {
-    return(df)
-  }
+  # Site_ID
   if("SITE_NEW" %in% colnames(df)) {
     df$Site_ID <- df$SITE_NEW
     df <- dplyr::select(df, -SITE_NEW)
@@ -189,6 +188,14 @@ fix_fmg_id <- function(df) {
   if("SiteID" %in% colnames(df)) {
     df$Site_ID <- df$SiteID
     df <- dplyr::select(df, -SiteID)
+  }
+  # Plot
+  if("PL_NUM" %in% colnames(df)) {
+    df$PLOT <- df$PL_NUM
+    df <- dplyr::select(df, -PL_NUM)
+  }
+  if("Plot" %in% colnames(df)) {
+    df <- dplyr::rename(df, PLOT = Plot)
   }
   return(df)
 }
