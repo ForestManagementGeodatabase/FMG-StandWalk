@@ -42,21 +42,46 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```
 
 ```{r select_stand, echo=FALSE}
-# Filter for the current stand
-age_pts_st   <- dplyr::filter(params$age_pts, 
-                              Site_ID == params$stand_id)
-fixed_pts_st <- dplyr::filter(params$fixed_pts, 
-                              Site_ID == params$stand_id)
-prism_pts_st <- dplyr::filter(params$prism_pts, 
-                              Site_ID == params$stand_id)
-age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
-                              Site_ID == params$stand_id)
-stand_st     <- dplyr::filter(params$stand_summary, 
-                              Site_ID == params$stand_id)
-species_st   <- dplyr::filter(params$species_summary, 
-                              Site_ID == params$stand_id)
-health_st    <- dplyr::filter(params$health_summary, 
-                              Site_ID == params$stand_id)
+# Determine if `stand_polys` are `Site` or `Stand`, then calculate filter for 
+# current stand.
+if("SID" %in% colnames(params$stand_polys)) {
+  # FMG Stand
+  age_pts_st   <- dplyr::filter(params$age_pts, 
+                                SID == params$stand_id)
+  fixed_pts_st <- dplyr::filter(params$fixed_pts, 
+                                SID == params$stand_id)
+  prism_pts_st <- dplyr::filter(params$prism_pts, 
+                                SID == params$stand_id)
+  age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
+                                SID == params$stand_id)
+  stand_st     <- dplyr::filter(params$stand_summary, 
+                                SID == params$stand_id)
+  species_st   <- dplyr::filter(params$species_summary, 
+                                SID == params$stand_id)
+  health_st    <- dplyr::filter(params$health_summary, 
+                                SID == params$stand_id) 
+
+
+} else if("Site_ID" %in% colnames(params$stand_polys)) {
+  # FMG Site
+  age_pts_st   <- dplyr::filter(params$age_pts, 
+                                Site_ID == params$stand_id)
+  fixed_pts_st <- dplyr::filter(params$fixed_pts, 
+                                Site_ID == params$stand_id)
+  prism_pts_st <- dplyr::filter(params$prism_pts, 
+                                Site_ID == params$stand_id)
+  age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
+                                Site_ID == params$stand_id)
+  stand_st     <- dplyr::filter(params$stand_summary, 
+                                Site_ID == params$stand_id)
+  species_st   <- dplyr::filter(params$species_summary, 
+                                Site_ID == params$stand_id)
+  health_st    <- dplyr::filter(params$health_summary, 
+                                Site_ID == params$stand_id) 
+
+} else {
+  stop("`stand_polys` is missing a known FMG ID field.")
+}
 ```
 
 ```{r site_or_stand, echo=FALSE}
@@ -153,6 +178,20 @@ hm_stocking_pct <- ifelse(hm_stocking > 110, ">110%", hm_stocking_pct)
 # Parse FMG spatial hierarchy
 ## Clean up `Site_ID` to make it easier to parse
 SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
+
+# Determine if `stand_st` are `Site` or `Stand`, then Parse FMG spatial hierarchy
+## Clean up `SID` or `Site_ID` to make it easier to parse
+if("SID" %in% colnames(stand_st)) {
+  # FMG Stand
+  SITE_CLEAN <- str_replace(stand_st$SID, "st", "t")
+
+} else if("Site_ID" %in% colnames(stand_st)) {
+  # FMG Site
+  SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
+
+} else {
+  stop("`stand_st` is missing a known FMG ID field.")
+}
 
 ## Match alpha hierarchy delimiter (p, c, u, t, s), then digits, 0 or more (\\d*)
 pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]

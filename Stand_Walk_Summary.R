@@ -53,7 +53,7 @@ tool_exec <- function(in_params, out_params) {
   age_fixed_summary_tbl     <- in_params[[6]]
   species_summary_tbl       <- in_params[[7]]
   health_summary_tbl        <- in_params[[8]]
-
+  
   # Code for testing in RStudio
   # library(dplyr)
   # library(tibble)
@@ -70,7 +70,7 @@ tool_exec <- function(in_params, out_params) {
   # in_params <- list(stand_polys, age_pts, fixed_pts, prism_pts,
   #                   stand_summary_tbl, age_fixed_summary_tbl,
   #                   species_summary_tbl, health_summary_tbl)
-
+  
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
   param_list <- tibble::lst(stand_polys, age_pts, fixed_pts, prism_pts, 
@@ -102,9 +102,9 @@ tool_exec <- function(in_params, out_params) {
   age_fixed_summary <- sf::st_read(dsn = gdb,
                                    layer = basename(age_fixed_summary_tbl))
   stand_summary     <- sf::st_read(dsn = gdb,
-                               layer = basename(stand_summary_tbl))
+                                   layer = basename(stand_summary_tbl))
   species_summary   <- sf::st_read(dsn = gdb,
-                               layer = basename(species_summary_tbl))
+                                   layer = basename(species_summary_tbl))
   health_summary    <- sf::st_read(dsn = gdb,
                                    layer = basename(health_summary_tbl))
   
@@ -126,12 +126,23 @@ tool_exec <- function(in_params, out_params) {
   message("stand_summary: ", colnames(stand_summary))
   message("species_summary: ", colnames(species_summary))
   message("health_summary: ", colnames(health_summary))
-
+  
   # Create a list to store reports for indexing
   report_files <- list()
   
-  # Get a list of stand_ids from the stand_summary_tbl
-  stand_vector <- stand_summary$Site_ID
+  # Determine if `stand_summary` are `Site` or `Stand`, then Get a list of 
+  # stand_ids from the stand_summary_tbl
+  if("SID" %in% colnames(stand_summary)) {
+    # FMG Stand
+    stand_vector <- stand_summary$SID
+    
+  } else if("Site_ID" %in% colnames(stand_summary)) {
+    # FMG Site
+    stand_vector <- stand_summary$Site_ID
+    
+  } else {
+    stop("`stand_polys` is missing a known FMG ID field.")
+  }
   
   # Iterate through stands
   for (s in stand_vector) {
