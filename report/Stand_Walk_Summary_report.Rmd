@@ -42,7 +42,7 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```
 
 ```{r select_stand, echo=FALSE}
-# Determine if `stand_polys` are `Site` or `Stand`, then calculate filter for 
+# Determine if `stand_polys` are `Site` or `Stand`, then filter for 
 # current stand.
 if("SID" %in% colnames(params$stand_polys)) {
   # FMG Stand
@@ -229,7 +229,7 @@ species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_cou
 
 ```{r understory, echo=FALSE, warning=FALSE, message=FALSE}
 # Simplify fixed_pts_st to just understory species fields
-fixed_understory <- fixed_pts_st[, c("PL_NUM", "UND_SP1", "UND_SP2", "UND_SP3")]
+fixed_understory <- fixed_pts_st[, c("PLOT", "UND_SP1", "UND_SP2", "UND_SP3")]
 # Drop factors
 fixed_understory$UND_SP1 <- as.character(fixed_understory$UND_SP1)
 fixed_understory$UND_SP2 <- as.character(fixed_understory$UND_SP2)
@@ -240,7 +240,7 @@ fixed_understory <- sf::st_drop_geometry(fixed_understory)
 fixed_understory <- set_na(fixed_understory)
 # Convert to long format by combining `UND_SP*` fields into a single field
 understory <- tidyr::pivot_longer(data = fixed_understory,
-                                  cols = -PL_NUM,
+                                  cols = -PLOT,
                                   names_to = c(".value", "SP"),
                                   names_sep = "_",
                                   values_drop_na = TRUE)
@@ -255,7 +255,7 @@ understory_species_count <- dplyr::arrange(understory_species_count, desc(count)
 
 ```{r ground, echo=FALSE, warning=FALSE, message=FALSE}
 # Simplify fixed_pts_st to just ground species fields
-fixed_ground <- fixed_pts_st[, c("PL_NUM", "GRD_SP1", "GRD_SP2", "GRD_SP3")]
+fixed_ground <- fixed_pts_st[, c("PLOT", "GRD_SP1", "GRD_SP2", "GRD_SP3")]
 # Drop factors
 fixed_ground$GRD_SP1 <- as.character(fixed_ground$GRD_SP1)
 fixed_ground$GRD_SP2 <- as.character(fixed_ground$GRD_SP2)
@@ -266,7 +266,7 @@ fixed_ground <- sf::st_drop_geometry(fixed_ground)
 fixed_ground <- set_na(fixed_ground)
 # Convert to long format by combining `GRD_SP*` fields into a single field
 ground <- tidyr::pivot_longer(data = fixed_ground,
-                              cols = -PL_NUM,
+                              cols = -PLOT,
                               names_to = c(".value", "SP"),
                               names_sep = "_",
                               values_drop_na = TRUE)
