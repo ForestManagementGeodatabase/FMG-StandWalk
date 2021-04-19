@@ -1,4 +1,4 @@
-# Utility R functions for the ArcGIS FluvialGeomorph toolbox. 
+# Utility R functions for the FMG ArcGIS toolbox. 
 
 #' @title Load needed packages
 #' 
@@ -174,25 +174,21 @@ compare_params <- function(in_params, param_list) {
 fix_fmg_id <- function(df) {
   # Site_ID
   if("SITE_NEW" %in% colnames(df)) {
-    df$Site_ID <- df$SITE_NEW
-    df <- dplyr::select(df, -SITE_NEW)
+    df <- dplyr::rename(df, Site_ID = SITE_NEW)
   }
   if("SITE_ID" %in% colnames(df)) {
-    df$Site_ID <- df$SITE_ID
-    df <- dplyr::select(df, -SITE_ID)
+    df <- dplyr::rename(df, Site_ID = SITE_ID)
   }
   if("SITEID" %in% colnames(df)) {
-    df$Site_ID <- df$SITEID
-    df <- dplyr::select(df, -SITEID)
+    df <- dplyr::rename(df, Site_ID = SITEID)
   }
   if("SiteID" %in% colnames(df)) {
-    df$Site_ID <- df$SiteID
-    df <- dplyr::select(df, -SiteID)
+    df <- dplyr::rename(df, Site_ID = SiteID)
   }
+
   # Plot
   if("PL_NUM" %in% colnames(df)) {
-    df$PLOT <- df$PL_NUM
-    df <- dplyr::select(df, -PL_NUM)
+    df <- dplyr::rename(df, PLOT = PL_NUM)
   }
   if("Plot" %in% colnames(df)) {
     df <- dplyr::rename(df, PLOT = Plot)
