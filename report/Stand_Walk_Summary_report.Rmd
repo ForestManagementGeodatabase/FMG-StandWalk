@@ -16,7 +16,7 @@ params:
 ---
 
 ```{r get_data, echo=FALSE, warning=FALSE}
-report_version <- "0.1.5"
+report_version <- "0.1.7"
 
 library(sf)
 library(units)

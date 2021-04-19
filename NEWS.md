@@ -1,3 +1,25 @@
+# FMG-StandWalk v0.1.7 (4/19/2021)
+
+## Major Changes
+* 
+* Added Pool 21 Forestry test data. 
+* Updated example reports to use the new Pool 21 Forestry surveys at both the FMG `site` and `stand` level of analysis. 
+
+## Bug Fixes
+* Updated field name cleaning function to address wild caught dataset field names.
+
+## Compatibility Matrix
+Please follow the compatibility matrix below to determine the required combination of software components necessary to run the toolbox. 
+
+Software        |Suported  
+---             |---              
+ArcGIS Pro      |2.6              
+ArcMap          |10.8          
+R               |4.0                 
+R-bridge        |1.0.1.244   
+FMG-StandWalk   |0.1.7            
+
+
 # FMG-StandWalk v0.1.6 (11/19/2020)
 
 ## Major Changes
