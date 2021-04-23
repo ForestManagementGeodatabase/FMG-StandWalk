@@ -25,6 +25,11 @@ library(stringr)
 library(lubridate)
 library(tidyr)
 
+# Load the FMG_utils
+fmg_dir <- ".."
+fmg_install <- file.path(fmg_dir, "install")
+source(file.path(fmg_install, "FMG_utils.R"))
+
 # Get the species-mast type table
 fmg_dir <- ".."
 fmg_data <- file.path(fmg_dir, "data")
