@@ -4,6 +4,7 @@
 #' the `stand_summary_tbl`. 
 #' 
 #' @export
+#' @param project                character; The name of the project. 
 #' @param stand_polys            feature class; A FMG polygon feature class 
 #'                               representing the "stands" in the summary 
 #'                               tables (either FMG "Sites" or "Stands"). 
@@ -45,14 +46,15 @@ tool_exec <- function(in_params, out_params) {
   set_pandoc()
   
   # gp tool parameters
-  stand_polys               <- in_params[[1]]
-  age_pts                   <- in_params[[2]]
-  fixed_pts                 <- in_params[[3]]
-  prism_pts                 <- in_params[[4]]
-  stand_summary_tbl         <- in_params[[5]]  
-  age_fixed_summary_tbl     <- in_params[[6]]
-  species_summary_tbl       <- in_params[[7]]
-  health_summary_tbl        <- in_params[[8]]
+  project                   <- in_params[[1]]
+  stand_polys               <- in_params[[2]]
+  age_pts                   <- in_params[[3]]
+  fixed_pts                 <- in_params[[4]]
+  prism_pts                 <- in_params[[5]]
+  stand_summary_tbl         <- in_params[[6]]  
+  age_fixed_summary_tbl     <- in_params[[7]]
+  species_summary_tbl       <- in_params[[8]]
+  health_summary_tbl        <- in_params[[9]]
   
   # Code for testing in RStudio
   # library(dplyr)
@@ -63,6 +65,7 @@ tool_exec <- function(in_params, out_params) {
   # library(sf)
   # dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
   # Site based summaries
+  # project                   <- "Pecan Grove"
   # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Site"
   # age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Age_20210412"
   # fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Fixed_20210412"
@@ -71,7 +74,8 @@ tool_exec <- function(in_params, out_params) {
   # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\AgeFixed_Summary_Site"
   # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Species_Summary_Site"
   # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Health_Summary_Site"
-  # Stand based summaries
+  # # Stand based summaries
+  # project                   <- "Pecan Grove"
   # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Stands"
   # age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Age_20210412"
   # fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Fixed_20210412"
@@ -80,27 +84,23 @@ tool_exec <- function(in_params, out_params) {
   # age_fixed_summary_tbl     <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\AgeFixed_Summary_Stand"
   # species_summary_tbl       <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Species_Summary_Stand"
   # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Health_Summary_Stand"
-  
-  in_params <- list(stand_polys, age_pts, fixed_pts, prism_pts,
+
+  # Build a list of parameters
+  in_params <- list(project, stand_polys, 
+                    age_pts, fixed_pts, prism_pts,
                     stand_summary_tbl, age_fixed_summary_tbl,
                     species_summary_tbl, health_summary_tbl)
   
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
-  param_list <- tibble::lst(stand_polys, age_pts, fixed_pts, prism_pts, 
+  param_list <- tibble::lst(project, stand_polys, 
+                            age_pts, fixed_pts, prism_pts, 
                             stand_summary_tbl, age_fixed_summary_tbl, 
                             species_summary_tbl, health_summary_tbl)
   
   ## Get parameter verification table
   message("Compare input tool parameters...")
   print(compare_params(in_params, param_list))
-  
-  # Create a `reports` folder in the parent folder that holds the geodatabase
-  parent_dir <- dirname(dirname(age_fixed_summary_tbl))
-  report_dir <- file.path(parent_dir, "reports")
-  if(!dir.exists(report_dir)) {
-    dir.create(report_dir)
-  }
   
   # Convert the geodatabase feature class and tables to data frames
   gdb <- dirname(age_fixed_summary_tbl)
@@ -132,6 +132,7 @@ tool_exec <- function(in_params, out_params) {
   species_summary   <- fix_fmg_id(species_summary)
   health_summary    <- fix_fmg_id(health_summary)
   
+  message("Input Column names")
   message("stand_polys_sf: ", colnames(stand_polys_sf))
   message("age_pts_sf: ", colnames(age_pts_sf))
   message("fixed_pts_sf: ", colnames(fixed_pts_sf))
@@ -140,6 +141,15 @@ tool_exec <- function(in_params, out_params) {
   message("stand_summary: ", colnames(stand_summary))
   message("species_summary: ", colnames(species_summary))
   message("health_summary: ", colnames(health_summary))
+  
+  # Create a `reports` folder in the parent folder that holds the geodatabase
+  parent_dir <- dirname(dirname(age_fixed_summary_tbl))
+  pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]
+  pool
+  report_dir <- file.path(parent_dir, "reports")
+  if(!dir.exists(report_dir)) {
+    dir.create(report_dir)
+  }
   
   # Create a list to store reports for indexing
   report_files <- list()
