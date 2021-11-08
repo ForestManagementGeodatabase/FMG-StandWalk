@@ -172,7 +172,7 @@ compare_params <- function(in_params, param_list) {
 #' names.
 #' 
 fix_fmg_id <- function(df) {
-  # Site_ID
+  # Rename previous ID fields to `Site_ID`
   if("SITE_NEW" %in% colnames(df)) {
     df <- dplyr::rename(df, Site_ID = SITE_NEW)
   }
@@ -186,13 +186,20 @@ fix_fmg_id <- function(df) {
     df <- dplyr::rename(df, Site_ID = SiteID)
   }
 
-  # Plot
+  # Rename the previous versions of the `PLOT` field
   if("Plot" %in% colnames(df)) {
     df <- dplyr::rename(df, PLOT = Plot)
   }
   return(df)
 }
 
+
+add_site_id <- function(df) {
+  # Create the `Site_ID` field from the `SITE` field if it already exists
+  if("SITE" %in% colnames(df)) {
+    df <- dplyr::mutate(df, Site_ID = SITE)
+  }
+}
 
 #' @title Convert missing data to NA
 #' 
