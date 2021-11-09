@@ -138,6 +138,16 @@ tool_exec <- function(in_params, out_params) {
   health_summary    <- fix_fmg_id(health_summary)
   health_summary_species    <- fix_fmg_id(health_summary_species)
   
+  # Add `Site_ID` to summary tables
+  age_pts_sf        <- add_site_id(age_pts_sf)
+  fixed_pts_sf      <- add_site_id(fixed_pts_sf)
+  prism_pts_sf      <- add_site_id(prism_pts_sf)
+  age_fixed_summary <- add_site_id(age_fixed_summary)
+  stand_summary     <- add_site_id(stand_summary)
+  species_summary   <- add_site_id(species_summary)
+  health_summary    <- add_site_id(health_summary)
+  health_summary_species    <- add_site_id(health_summary_species)
+  
   message("Input Column names")
   message("stand_polys_sf: ", colnames(stand_polys_sf))
   message("age_pts_sf: ", colnames(age_pts_sf))
@@ -151,7 +161,6 @@ tool_exec <- function(in_params, out_params) {
   
   # Create a `reports` folder in the parent folder that holds the geodatabase
   parent_dir <- dirname(dirname(age_fixed_summary_tbl))
-  #pool_label  <- stringr::str_match(stand_polys_sf$SITE, "p\\d*")[1]
   report_dir <- file.path(parent_dir, "reports")
   if(!dir.exists(report_dir)) {
     dir.create(report_dir)
@@ -198,7 +207,8 @@ tool_exec <- function(in_params, out_params) {
                           "age_fixed_summary" = age_fixed_summary,
                           "stand_summary" = stand_summary,
                           "species_summary" = species_summary,
-                          "health_summary" = health_summary)
+                          "health_summary" = health_summary,
+                          "health_summary_species" = health_summary_species)
     report_template <- file.path(dir_name, "report", 
                                  "Stand_Walk_Summary_report.Rmd")
     
