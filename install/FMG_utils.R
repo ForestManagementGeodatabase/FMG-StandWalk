@@ -190,13 +190,20 @@ fix_fmg_id <- function(df) {
   if("Plot" %in% colnames(df)) {
     df <- dplyr::rename(df, PLOT = Plot)
   }
+  if("PL_NUM" %in% colnames(df)) {
+    df <- dplyr::rename(df, PLOT = PL_NUM)
+  }
+  
   return(df)
 }
 
 
 add_site_id <- function(df) {
   # Create the `Site_ID` field from the `SITE` field if it already exists
-  if("SITE" %in% colnames(df)) {
+  if("SID" %in% colnames(df)) {
+    df <- dplyr::mutate(df, Site_ID = SID)
+    
+  } else if("SITE" %in% colnames(df)) {
     df <- dplyr::mutate(df, Site_ID = SITE)
   }
 }
