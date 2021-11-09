@@ -13,10 +13,11 @@ params:
   stand_summary:                    # data frame
   species_summary:                  # data frame
   health_summary:                   # data frame
+  health_summary_species:           # data frame
 ---
 
 ```{r get_data, echo=FALSE, warning=FALSE}
-report_version <- "0.1.7"
+report_version <- "0.1.8"
 
 library(sf)
 library(units)
@@ -39,11 +40,16 @@ spp_masttype <- read.csv(spp_masttype_file)
 
 ```{r test_data, echo=FALSE}
 # For testing (cannot use the variable name `params` as it is controlled by the IDE)
-# params2 <- list("stand_id" = stand_id,
-#                 "age_fixed_summary" = age_fixed_summary,
-#                 "stand_summary" = stand_summary,
-#                 'species_summary' = species_summary,
-#                 "health_summary" = health_summary)
+# params <- list("stand_id" = stand_id,
+#                  "stand_polys" = stand_polys_sf, 
+#                  "age_pts" = age_pts_sf,
+#                  "fixed_pts" = fixed_pts_sf,
+#                  "prism_pts" = prism_pts_sf,
+#                  "age_fixed_summary" = age_fixed_summary,
+#                  "stand_summary" = stand_summary,
+#                  "species_summary" = species_summary,
+#                  "health_summary" = health_summary,
+#                  "health_summary_species" = health_summary_species)
 ```
 
 ```{r select_stand, echo=FALSE}
@@ -329,7 +335,7 @@ regen_rate       <- ifelse(age_fixed_st$UND_COV > 0 & age_fixed_st$UND_COV < 1,
                            "<1", floor(age_fixed_st$UND_COV))
 
 # Size Class
-sapling_tpa      <- NA                                    # added in the future
+sapling_tpa      <- floor(stand_st$SAP_TPA)
 polesize_tpa     <- floor(stand_st$POL_TPA)
 sawtimber_tpa    <- floor(stand_st$SAW_TPA)
 mature_tpa       <- floor(stand_st$MAT_TPA)
