@@ -41,7 +41,7 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```{r test_data, echo=FALSE}
 # For testing (cannot use the variable name `params` as it is controlled by the IDE)
 # params <- list("stand_id" = stand_id,
-#                  "stand_polys" = stand_polys_sf, 
+#                  "stand_polys" = stand_polys_sf,
 #                  "age_pts" = age_pts_sf,
 #                  "fixed_pts" = fixed_pts_sf,
 #                  "prism_pts" = prism_pts_sf,
@@ -70,7 +70,9 @@ if("SID" %in% colnames(params$stand_polys)) {
   species_st   <- dplyr::filter(params$species_summary, 
                                 SID == params$stand_id)
   health_st    <- dplyr::filter(params$health_summary, 
-                                SID == params$stand_id) 
+                                SID == params$stand_id)
+  hlth_spec_st <- dplyr::filter(params$health_summary_species, 
+                                SID == params$stand_id)
 
 
 } else if("Site_ID" %in% colnames(params$stand_polys)) {
@@ -88,7 +90,9 @@ if("SID" %in% colnames(params$stand_polys)) {
   species_st   <- dplyr::filter(params$species_summary, 
                                 Site_ID == params$stand_id)
   health_st    <- dplyr::filter(params$health_summary, 
-                                Site_ID == params$stand_id) 
+                                Site_ID == params$stand_id)
+  hlth_spec_st <- dplyr::filter(params$health_summary_species, 
+                                Site_ID == params$stand_id)
 
 } else {
   stop("`stand_polys` is missing a known FMG ID field.")
@@ -120,14 +124,19 @@ if("SID" %in% colnames(params$stand_polys)) {
 # Sort tables
 species_sort <- dplyr::arrange(species_st, desc(AV_BA), desc(AV_TPA), desc(QM_DBH))
 health_sort <- dplyr::arrange(health_st, desc(AV_TPA))
+health_species_sort <- dplyr::arrange(hlth_spec_st, desc(AV_TPA))
 ```
 
 ```{r set_factors, echo=FALSE}
 # Set health_summary$TR_HLTH labels
 health_sort$TR_HLTH <- factor(health_sort$TR_HLTH,
-                              levels = c("V", "S", "SD", "D"),
-                              labels = c("Healthy-Vigorous", "Stressed", 
+                              levels = c("H", "S", "SD", "D"),
+                              labels = c("Healthy", "Stressed", 
                                          "Significant Decline", "Dead"))
+health_species_sort$TR_HLTH <- factor(health_species_sort$TR_HLTH,
+                                      levels = c("H", "S", "SD", "D"),
+                                      labels = c("Healthy", "Stressed", 
+                                                 "Significant Decline", "Dead"))
 ```
 
 ```{r hard_mast, echo=FALSE}
@@ -363,17 +372,26 @@ o1_avg_tpa    <- ifelse(species_sort[1,]$AV_TPA > 0 & species_sort[1,]$AV_TPA < 
 o1_avg_ba     <- ifelse(species_sort[1,]$AV_BA > 0 & species_sort[1,]$AV_BA < 1,
                            "<1", floor(species_sort[1,]$AV_BA))
 o1_qm_dbh     <- paste0(floor(species_sort[1,]$QM_DBH), '"')
-o1_target_tpa <- ""                         
-o1_target_ba  <- ""
+o1_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o1_usda_code)[1,]$TR_HLTH)
+o1_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+                                         TR_SP == o1_usda_code)[1,]$AV_TPA /
+                                  species_sort[1,]$AV_TPA) * 100), 
+                           "%")
 
 o2_usda_code  <- species_sort[2,]$TR_SP
+
 o2_avg_tpa    <- ifelse(species_sort[2,]$AV_TPA > 0 & species_sort[2,]$AV_TPA < 1,
                            "<1", floor(species_sort[2,]$AV_TPA))
 o2_avg_ba     <- ifelse(species_sort[2,]$AV_BA > 0 & species_sort[2,]$AV_BA < 1,
                            "<1", floor(species_sort[2,]$AV_BA))
 o2_qm_dbh     <- paste0(floor(species_sort[2,]$QM_DBH), '"')
-o2_target_tpa <- ""
-o2_target_ba  <- ""
+o2_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o2_usda_code)[1,]$TR_HLTH)
+o2_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+                                         TR_SP == o2_usda_code)[1,]$AV_TPA /
+                                  species_sort[2,]$AV_TPA) * 100), 
+                           "%")
 
 o3_usda_code  <- species_sort[3,]$TR_SP
 o3_avg_tpa    <- ifelse(species_sort[3,]$AV_TPA > 0 & species_sort[3,]$AV_TPA < 1,
@@ -381,8 +399,12 @@ o3_avg_tpa    <- ifelse(species_sort[3,]$AV_TPA > 0 & species_sort[3,]$AV_TPA < 
 o3_avg_ba     <- ifelse(species_sort[3,]$AV_BA > 0 & species_sort[3,]$AV_BA < 1,
                            "<1", floor(species_sort[3,]$AV_BA))
 o3_qm_dbh     <- paste0(floor(species_sort[3,]$QM_DBH), '"')
-o3_target_tpa <- ""
-o3_target_ba  <- ""
+o3_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o3_usda_code)[1,]$TR_HLTH)
+o3_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+                                         TR_SP == o3_usda_code)[1,]$AV_TPA /
+                                  species_sort[3,]$AV_TPA) * 100), 
+                           "%")
 
 o4_usda_code  <- species_sort[4,]$TR_SP
 o4_avg_tpa    <- ifelse(species_sort[4,]$AV_TPA > 0 & species_sort[4,]$AV_TPA < 1,
@@ -390,8 +412,12 @@ o4_avg_tpa    <- ifelse(species_sort[4,]$AV_TPA > 0 & species_sort[4,]$AV_TPA < 
 o4_avg_ba     <- ifelse(species_sort[4,]$AV_BA > 0 & species_sort[4,]$AV_BA < 1,
                            "<1", floor(species_sort[4,]$AV_BA))
 o4_qm_dbh     <- paste0(floor(species_sort[4,]$QM_DBH), '"')
-o4_target_tpa <- ""
-o4_target_ba  <- ""
+o4_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o4_usda_code)[1,]$TR_HLTH)
+o4_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+                                         TR_SP == o4_usda_code)[1,]$AV_TPA /
+                                  species_sort[4,]$AV_TPA) * 100), 
+                           "%")
 
 o5_usda_code  <- species_sort[5,]$TR_SP
 o5_avg_tpa    <- ifelse(species_sort[5,]$AV_TPA > 0 & species_sort[5,]$AV_TPA < 1,
@@ -399,8 +425,15 @@ o5_avg_tpa    <- ifelse(species_sort[5,]$AV_TPA > 0 & species_sort[5,]$AV_TPA < 
 o5_avg_ba     <- ifelse(species_sort[5,]$AV_BA > 0 & species_sort[5,]$AV_BA < 1,
                            "<1", floor(species_sort[5,]$AV_BA))
 o5_qm_dbh     <- paste0(floor(species_sort[5,]$QM_DBH),'"')
-o5_target_tpa <- ""
-o5_target_ba  <- ""
+o5_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o5_usda_code)[1,]$TR_HLTH)
+o5_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+                                         TR_SP == o5_usda_code)[1,]$AV_TPA /
+                                  species_sort[5,]$AV_TPA) * 100), 
+                           "%")
+
+# Top 5 Overstory Species Table
+
 ```
 
 <!--
@@ -756,16 +789,16 @@ QM DBH
 `r o1_qm_dbh`
 :::
 ::: {.var-name}
-Target TPA
+Dominant Health Class
 :::
 ::: {.var-value}
-`r o1_target_tpa`
+`r o1_dom_hlth`
 :::
 ::: {.var-name}
-Target BA
+Dominant Health Class Composition
 :::
 ::: {.var-value}
-`r o1_target_ba`
+`r o1_dom_hlth_comp`
 :::
 :::::
 ::::::::
@@ -798,16 +831,16 @@ QM DBH
 `r o2_qm_dbh`
 :::
 ::: {.var-name}
-Target TPA
+Dominant Health Class
 :::
 ::: {.var-value}
-`r o2_target_tpa`
+`r o2_dom_hlth`
 :::
 ::: {.var-name}
-Target BA
+Dominant Health Class Composition
 :::
 ::: {.var-value}
-`r o2_target_ba`
+`r o2_dom_hlth_comp`
 :::
 :::::
 ::::::::
@@ -840,16 +873,16 @@ QM DBH
 `r o3_qm_dbh`
 :::
 ::: {.var-name}
-Target TPA
+Dominant Health Class
 :::
 ::: {.var-value}
-`r o3_target_tpa`
+`r o3_dom_hlth`
 :::
 ::: {.var-name}
-Target BA
+Dominant Health Class Composition
 :::
 ::: {.var-value}
-`r o3_target_ba`
+`r o3_dom_hlth_comp`
 :::
 :::::
 ::::::::
@@ -882,16 +915,16 @@ QM DBH
 `r o4_qm_dbh`
 :::
 ::: {.var-name}
-Target TPA
+Dominant Health Class
 :::
 ::: {.var-value}
-`r o4_target_tpa`
+`r o4_dom_hlth`
 :::
 ::: {.var-name}
-Target BA
+Dominant Health Class Composition
 :::
 ::: {.var-value}
-`r o4_target_ba`
+`r o4_dom_hlth_comp`
 :::
 :::::
 ::::::::
@@ -924,20 +957,23 @@ QM DBH
 `r o5_qm_dbh`
 :::
 ::: {.var-name}
-Target TPA
+Dominant Health Class
 :::
 ::: {.var-value}
-`r o5_target_tpa`
+`r o5_dom_hlth`
 :::
 ::: {.var-name}
-Target BA
+Dominant Health Class Composition
 :::
 ::: {.var-value}
-`r o5_target_ba`
+`r o5_dom_hlth_comp`
 :::
 :::::
 ::::::::
 
 ::::::::::::
+
+<!-- Top 5 Overstory Species Table -->
+
 
 report version: `r report_version`
