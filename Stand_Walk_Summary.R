@@ -63,6 +63,7 @@ tool_exec <- function(in_params, out_params) {
   library(lubridate)
   library(tidyr)
   library(sf)
+  library(kableExtra)
   dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
   # Site based summaries
   project                    <- "Pecan Grove"

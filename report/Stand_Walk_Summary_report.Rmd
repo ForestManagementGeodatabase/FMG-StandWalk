@@ -374,7 +374,7 @@ o1_avg_ba     <- ifelse(species_sort[1,]$AV_BA > 0 & species_sort[1,]$AV_BA < 1,
 o1_qm_dbh     <- paste0(floor(species_sort[1,]$QM_DBH), '"')
 o1_dom_hlth   <- as.character(filter(health_species_sort, 
                                      TR_SP == o1_usda_code)[1,]$TR_HLTH)
-o1_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+o1_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
                                          TR_SP == o1_usda_code)[1,]$AV_TPA /
                                   species_sort[1,]$AV_TPA) * 100), 
                            "%")
@@ -388,7 +388,7 @@ o2_avg_ba     <- ifelse(species_sort[2,]$AV_BA > 0 & species_sort[2,]$AV_BA < 1,
 o2_qm_dbh     <- paste0(floor(species_sort[2,]$QM_DBH), '"')
 o2_dom_hlth   <- as.character(filter(health_species_sort, 
                                      TR_SP == o2_usda_code)[1,]$TR_HLTH)
-o2_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+o2_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
                                          TR_SP == o2_usda_code)[1,]$AV_TPA /
                                   species_sort[2,]$AV_TPA) * 100), 
                            "%")
@@ -401,7 +401,7 @@ o3_avg_ba     <- ifelse(species_sort[3,]$AV_BA > 0 & species_sort[3,]$AV_BA < 1,
 o3_qm_dbh     <- paste0(floor(species_sort[3,]$QM_DBH), '"')
 o3_dom_hlth   <- as.character(filter(health_species_sort, 
                                      TR_SP == o3_usda_code)[1,]$TR_HLTH)
-o3_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+o3_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
                                          TR_SP == o3_usda_code)[1,]$AV_TPA /
                                   species_sort[3,]$AV_TPA) * 100), 
                            "%")
@@ -414,7 +414,7 @@ o4_avg_ba     <- ifelse(species_sort[4,]$AV_BA > 0 & species_sort[4,]$AV_BA < 1,
 o4_qm_dbh     <- paste0(floor(species_sort[4,]$QM_DBH), '"')
 o4_dom_hlth   <- as.character(filter(health_species_sort, 
                                      TR_SP == o4_usda_code)[1,]$TR_HLTH)
-o4_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+o4_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
                                          TR_SP == o4_usda_code)[1,]$AV_TPA /
                                   species_sort[4,]$AV_TPA) * 100), 
                            "%")
@@ -427,13 +427,25 @@ o5_avg_ba     <- ifelse(species_sort[5,]$AV_BA > 0 & species_sort[5,]$AV_BA < 1,
 o5_qm_dbh     <- paste0(floor(species_sort[5,]$QM_DBH),'"')
 o5_dom_hlth   <- as.character(filter(health_species_sort, 
                                      TR_SP == o5_usda_code)[1,]$TR_HLTH)
-o5_dom_hlth_comp <- paste0(floor((filter(health_species_sort, 
+o5_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
                                          TR_SP == o5_usda_code)[1,]$AV_TPA /
                                   species_sort[5,]$AV_TPA) * 100), 
                            "%")
 
 # Top 5 Overstory Species Table
-
+overstory <- data.frame(usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code, 
+                                      o4_usda_code, o5_usda_code),
+                        avg_tpa = c(o1_avg_tpa, o2_avg_tpa, o3_avg_tpa, 
+                                    o4_avg_tpa, o5_avg_tpa),
+                        avg_ba = c(o1_avg_ba, o2_avg_ba, o3_avg_ba,
+                                   o4_avg_ba, o5_avg_ba),
+                        qm_dbh = c(o1_qm_dbh, o2_qm_dbh, o3_qm_dbh,
+                                   o4_qm_dbh, o5_qm_dbh),
+                        dom_hlth = c(o1_dom_hlth, o2_dom_hlth, o3_dom_hlth,
+                                     o4_dom_hlth, o5_dom_hlth),
+                        dom_hlth_comp = c(o1_dom_hlth_comp, o2_dom_hlth_comp,
+                                          o3_dom_hlth_comp, o4_dom_hlth_comp,
+                                          o5_dom_hlth_comp))
 ```
 
 <!--
@@ -974,6 +986,17 @@ Dominant Health Class Composition
 ::::::::::::
 
 <!-- Top 5 Overstory Species Table -->
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+kbl(overstory,
+    col.names = c("USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
+                  "Dominant Health Class", 
+                  "Dominant Health Class Composition")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", 
+                                      "responsive"),
+                full_width = TRUE, 
+                position = "left") %>%
+  row_spec(0, bold = TRUE)
+```
 
 
 report version: `r report_version`
