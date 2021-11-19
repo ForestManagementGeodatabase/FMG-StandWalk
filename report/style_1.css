@@ -129,3 +129,22 @@ h2 {
   padding: 5px;
   box-sizing: border-box;
 }
+
+/* Control print formating */
+@media print {
+  .table-striped tbody tr:nth-of-type(odd) td {
+      background-color: rgba(0,0,0,.05) !important;
+      -webkit-print-color-adjust: exact;
+  }
+
+  .item-box {
+    page-break-inside: avoid;
+  }
+  .section-box {
+    page-break-inside: avoid;
+  }
+
+  .page-break {
+  page-break-after: always;
+  }
+}
