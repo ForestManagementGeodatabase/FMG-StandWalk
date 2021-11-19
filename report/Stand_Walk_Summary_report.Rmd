@@ -5,6 +5,7 @@ output:
     css: style_1.css
 params:
   stand_id:                         # string
+  level:                            # string
   stand_polys:                      # sf
   age_pts:                          # sf
   fixed_pts:                        # sf
@@ -41,6 +42,7 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```{r test_data, echo=FALSE}
 # For testing (cannot use the variable name `params` as it is controlled by the IDE)
 # params <- list("stand_id" = stand_id,
+#                  "level" = level,
 #                  "stand_polys" = stand_polys_sf,
 #                  "age_pts" = age_pts_sf,
 #                  "fixed_pts" = fixed_pts_sf,
@@ -53,76 +55,35 @@ spp_masttype <- read.csv(spp_masttype_file)
 ```
 
 ```{r select_stand, echo=FALSE}
-# Determine if `stand_polys` are `Site` or `Stand`, then filter for 
-# current stand.
-if("SID" %in% colnames(params$stand_polys)) {
-  # FMG Stand
-  age_pts_st   <- dplyr::filter(params$age_pts, 
-                                SID == params$stand_id)
-  fixed_pts_st <- dplyr::filter(params$fixed_pts, 
-                                SID == params$stand_id)
-  prism_pts_st <- dplyr::filter(params$prism_pts, 
-                                SID == params$stand_id)
-  age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
-                                SID == params$stand_id)
-  stand_st     <- dplyr::filter(params$stand_summary, 
-                                SID == params$stand_id)
-  species_st   <- dplyr::filter(params$species_summary, 
-                                SID == params$stand_id)
-  health_st    <- dplyr::filter(params$health_summary, 
-                                SID == params$stand_id)
-  hlth_spec_st <- dplyr::filter(params$health_summary_species, 
-                                SID == params$stand_id)
-
-
-} else if("Site_ID" %in% colnames(params$stand_polys)) {
-  # FMG Site
-  age_pts_st   <- dplyr::filter(params$age_pts, 
-                                Site_ID == params$stand_id)
-  fixed_pts_st <- dplyr::filter(params$fixed_pts, 
-                                Site_ID == params$stand_id)
-  prism_pts_st <- dplyr::filter(params$prism_pts, 
-                                Site_ID == params$stand_id)
-  age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
-                                Site_ID == params$stand_id)
-  stand_st     <- dplyr::filter(params$stand_summary, 
-                                Site_ID == params$stand_id)
-  species_st   <- dplyr::filter(params$species_summary, 
-                                Site_ID == params$stand_id)
-  health_st    <- dplyr::filter(params$health_summary, 
-                                Site_ID == params$stand_id)
-  hlth_spec_st <- dplyr::filter(params$health_summary_species, 
-                                Site_ID == params$stand_id)
-
-} else {
-  stop("`stand_polys` is missing a known FMG ID field.")
-}
+age_pts_st   <- dplyr::filter(params$age_pts, 
+                              Site_ID == params$stand_id)
+fixed_pts_st <- dplyr::filter(params$fixed_pts, 
+                              Site_ID == params$stand_id)
+prism_pts_st <- dplyr::filter(params$prism_pts, 
+                              Site_ID == params$stand_id)
+age_fixed_st <- dplyr::filter(params$age_fixed_summary, 
+                              Site_ID == params$stand_id)
+stand_st     <- dplyr::filter(params$stand_summary, 
+                              Site_ID == params$stand_id)
+species_st   <- dplyr::filter(params$species_summary, 
+                              Site_ID == params$stand_id)
+health_st    <- dplyr::filter(params$health_summary, 
+                              Site_ID == params$stand_id)
+hlth_spec_st <- dplyr::filter(params$health_summary_species, 
+                              Site_ID == params$stand_id)
 ```
 
-```{r site_or_stand, echo=FALSE}
-# Determine if `stand_polys` are `Site` or `Stand`, then calculate acres
-if("SID" %in% colnames(params$stand_polys)) {
-  # FMG Stand
-  poly_st <- dplyr::filter(params$stand_polys,
-                           SID == params$stand_id)
-  area <- sf::st_area(poly_st)
-  acres <- units::set_units(area, acre)
-
-} else if("Site_ID" %in% colnames(params$stand_polys)) {
-  # FMG Site
-  poly_st <- dplyr::filter(params$stand_polys,
-                           Site_ID == params$stand_id)
-  area <- sf::st_area(poly_st)
-  acres <- units::set_units(area, acre)
-
-} else {
-  stop("`stand_polys` is missing a known FMG ID field.")
-}
+```{r stand_area, echo=FALSE}
+poly_st <- dplyr::filter(params$stand_polys,
+                         Site_ID == params$stand_id)
+area <- sf::st_area(poly_st)
+acres <- units::set_units(area, acre)
 ```
 
 ```{r sort_tables, echo=FALSE}
 # Sort tables
-species_sort <- dplyr::arrange(species_st, desc(AV_BA), desc(AV_TPA), desc(QM_DBH))
+species_sort <- dplyr::arrange(species_st, desc(AV_BA), desc(AV_TPA), 
+                               desc(QM_DBH))
 health_sort <- dplyr::arrange(health_st, desc(AV_TPA))
 health_species_sort <- dplyr::arrange(hlth_spec_st, desc(AV_TPA))
 ```

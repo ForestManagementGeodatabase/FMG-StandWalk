@@ -197,6 +197,7 @@ tool_exec <- function(in_params, out_params) {
     
     # Set report parameters
     report_params <- list("stand_id" =  s,
+                          "level" = level,
                           "stand_polys" = stand_polys_sf, 
                           "age_pts" = age_pts_sf,
                           "fixed_pts" = fixed_pts_sf,
