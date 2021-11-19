@@ -233,31 +233,3 @@ set_na <- function(df) {
   df <- dplyr::mutate_all(df, list(~na_if(.,"<Null>")))
   df <- dplyr::mutate_all(df, list(~na_if(.,"<null>")))
 }
-
-
-fmg_id <- function(df) {
-  # Parse FMG spatial hierarchy
-  ## Clean up `Site_ID` to make it easier to parse
-  SITE_CLEAN <- str_replace(Site_ID_df$Site_ID, "st", "t")
-  
-  # Determine if `stand_st` are `Site` or `Stand`, then Parse FMG spatial hierarchy
-  ## Clean up `SID` or `Site_ID` to make it easier to parse
-  if("SID" %in% colnames(stand_st)) {
-    # FMG Stand
-    SITE_CLEAN <- str_replace(stand_st$SID, "st", "t")
-    
-  } else if("Site_ID" %in% colnames(stand_st)) {
-    # FMG Site
-    SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
-    
-  } else {
-    stop("`stand_st` is missing a known FMG ID field.")
-  }
-  
-  ## Match alpha hierarchy delimiter (p, c, u, t, s), then digits, 0 or more (\\d*)
-  pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]
-  comp_label  <- stringr::str_match(SITE_CLEAN, "c\\d*")[1]
-  unit_label  <- stringr::str_match(SITE_CLEAN, "u\\d*")[1]
-  site_label  <- stringr::str_match(SITE_CLEAN, "t\\d*")[1]
-  stand_label <- stringr::str_match(SITE_CLEAN, "s\\d*")[1]
-}
