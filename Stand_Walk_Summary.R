@@ -5,6 +5,8 @@
 #' 
 #' @export
 #' @param project                character; The name of the project. 
+#' @param level                  character; The level of the FMG hierarchy. One
+#'                               of: stand, site, or unit.  
 #' @param stand_polys            feature class; A FMG polygon feature class 
 #'                               representing the "stands" in the summary 
 #'                               tables (either FMG "Sites" or "Stands"). 
@@ -46,15 +48,17 @@ tool_exec <- function(in_params, out_params) {
   set_pandoc()
   
   # gp tool parameters
-  project                   <- in_params[[1]]
-  stand_polys               <- in_params[[2]]
-  age_pts                   <- in_params[[3]]
-  fixed_pts                 <- in_params[[4]]
-  prism_pts                 <- in_params[[5]]
-  stand_summary_tbl         <- in_params[[6]]  
-  age_fixed_summary_tbl     <- in_params[[7]]
-  species_summary_tbl       <- in_params[[8]]
-  health_summary_tbl        <- in_params[[9]]
+  project                    <- in_params[[1]]
+  level                      <- in_params[[2]]
+  stand_polys                <- in_params[[3]]
+  age_pts                    <- in_params[[4]]
+  fixed_pts                  <- in_params[[5]]
+  prism_pts                  <- in_params[[6]]
+  stand_summary_tbl          <- in_params[[7]]  
+  age_fixed_summary_tbl      <- in_params[[8]]
+  species_summary_tbl        <- in_params[[9]]
+  health_summary_tbl         <- in_params[[10]]
+  health_species_summary_tbl <- in_params[[10]]
   
   # Code for testing in RStudio
   library(dplyr)
@@ -64,20 +68,22 @@ tool_exec <- function(in_params, out_params) {
   library(tidyr)
   library(sf)
   library(kableExtra)
-  dir_name                  <- "D:/Workspace/FMG/Stand_Walk_Sheets/FMG_StandWalk"
+  dir_name                   <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk"
   # Site based summaries
-  project                    <- "Pecan Grove"
-  stand_polys                <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Pool_12_FMG_Sites"
-  age_pts                    <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Age"
-  fixed_pts                  <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Fixed"
-  prism_pts                  <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Prism"
-  stand_summary_tbl          <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\PPool12_TimberInventory_ForReconReport.gdb\\Site_Stand_Summary"
-  age_fixed_summary_tbl      <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_AgeFixed_Summary"
-  species_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Species_Summary"
-  health_summary_tbl         <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary"
-  health_summary_species_tbl <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary_BySpecies"
+  project                    <- "Pool 12 Forestry"
+  level                      <- "site"
+  stand_polys                <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Pool12_ForestInventory_Sites_Base"
+  age_pts                    <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Age"
+  fixed_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Fixed"
+  prism_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Prism"
+  stand_summary_tbl          <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\PPool12_TimberInventory_ForReconReport.gdb\\Site_Stand_Summary"
+  age_fixed_summary_tbl      <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_AgeFixed_Summary"
+  species_summary_tbl        <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Species_Summary"
+  health_summary_tbl         <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary"
+  health_summary_species_tbl <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary_BySpecies"
   # # Stand based summaries
   # project                   <- "Pecan Grove"
+  # level                     <- "stand"
   # stand_polys               <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Stands"
   # age_pts                   <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Age_20210412"
   # fixed_pts                 <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Pool21_Fixed_20210412"
@@ -88,7 +94,7 @@ tool_exec <- function(in_params, out_params) {
   # health_summary_tbl        <- "D:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_21_PecanGrove\\Pool21_AGOL.gdb\\Health_Summary_Stand"
 
   # Build a list of parameters
-  in_params <- list(project, stand_polys, 
+  in_params <- list(project, level, stand_polys, 
                     age_pts, fixed_pts, prism_pts,
                     stand_summary_tbl, age_fixed_summary_tbl,
                     species_summary_tbl, health_summary_tbl, 
@@ -96,7 +102,7 @@ tool_exec <- function(in_params, out_params) {
   
   # Verify parameters
   ## Create list of parameters (named using the parameter names)
-  param_list <- tibble::lst(project, stand_polys, 
+  param_list <- tibble::lst(project, level, stand_polys, 
                             age_pts, fixed_pts, prism_pts, 
                             stand_summary_tbl, age_fixed_summary_tbl, 
                             species_summary_tbl, health_summary_tbl, 
@@ -140,14 +146,15 @@ tool_exec <- function(in_params, out_params) {
   health_summary_species    <- fix_fmg_id(health_summary_species)
   
   # Add `Site_ID` to summary tables
-  age_pts_sf        <- add_site_id(age_pts_sf)
-  fixed_pts_sf      <- add_site_id(fixed_pts_sf)
-  prism_pts_sf      <- add_site_id(prism_pts_sf)
-  age_fixed_summary <- add_site_id(age_fixed_summary)
-  stand_summary     <- add_site_id(stand_summary)
-  species_summary   <- add_site_id(species_summary)
-  health_summary    <- add_site_id(health_summary)
-  health_summary_species    <- add_site_id(health_summary_species)
+  stand_polys_sf         <- add_id(stand_polys_sf, level)
+  age_pts_sf             <- add_id(age_pts_sf, level)
+  fixed_pts_sf           <- add_id(fixed_pts_sf, level)
+  prism_pts_sf           <- add_id(prism_pts_sf, level)
+  age_fixed_summary      <- add_id(age_fixed_summary, level)
+  stand_summary          <- add_id(stand_summary, level)
+  species_summary        <- add_id(species_summary, level)
+  health_summary         <- add_id(health_summary, level)
+  health_summary_species <- add_id(health_summary_species, level)
   
   message("Input Column names")
   message("stand_polys_sf: ", colnames(stand_polys_sf))
@@ -170,19 +177,8 @@ tool_exec <- function(in_params, out_params) {
   # Create a list to store reports for indexing
   report_files <- list()
   
-  # Determine if `stand_summary` are `Site` or `Stand`, then Get a list of 
-  # stand_ids from the stand_summary_tbl
-  if("SID" %in% colnames(stand_summary)) {
-    # FMG Stand
-    stand_vector <- stand_summary$SID
-    
-  } else if("SITE" %in% colnames(stand_summary)) {
-    # FMG Site
-    stand_vector <- stand_summary$SITE
-    
-  } else {
-    stop("`stand_polys` is missing a known FMG ID field.")
-  }
+  # Get a list of ids from the stand_summary_tbl
+  stand_vector <- stand_summary$Site_ID
   
   # Iterate through stands
   for (s in stand_vector) {
