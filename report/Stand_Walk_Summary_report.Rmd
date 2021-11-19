@@ -156,23 +156,8 @@ hm_stocking_pct <- ifelse(hm_stocking > 110, ">110%", hm_stocking_pct)
 ```
 
 ```{r parse_fmg_levels, echo=FALSE}
-# Parse FMG spatial hierarchy
 ## Clean up `Site_ID` to make it easier to parse
 SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
-
-# Determine if `stand_st` are `Site` or `Stand`, then Parse FMG spatial hierarchy
-## Clean up `SID` or `Site_ID` to make it easier to parse
-if("SID" %in% colnames(stand_st)) {
-  # FMG Stand
-  SITE_CLEAN <- str_replace(stand_st$SID, "st", "t")
-
-} else if("Site_ID" %in% colnames(stand_st)) {
-  # FMG Site
-  SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
-
-} else {
-  stop("`stand_st` is missing a known FMG ID field.")
-}
 
 ## Match alpha hierarchy delimiter (p, c, u, t, s), then digits, 0 or more (\\d*)
 pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]
@@ -339,6 +324,8 @@ o1_dom_hlth_comp <- paste0(round((filter(health_species_sort,
                                          TR_SP == o1_usda_code)[1,]$AV_TPA /
                                   species_sort[1,]$AV_TPA) * 100), 
                            "%")
+o1_snag_tpa   <- ifelse(species_sort[1,]$SNAG_TPA > 0 & species_sort[1,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[1,]$SNAG_TPA))
 
 o2_usda_code  <- species_sort[2,]$TR_SP
 
@@ -353,6 +340,8 @@ o2_dom_hlth_comp <- paste0(round((filter(health_species_sort,
                                          TR_SP == o2_usda_code)[1,]$AV_TPA /
                                   species_sort[2,]$AV_TPA) * 100), 
                            "%")
+o2_snag_tpa   <- ifelse(species_sort[2,]$SNAG_TPA > 0 & species_sort[2,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[2,]$SNAG_TPA))
 
 o3_usda_code  <- species_sort[3,]$TR_SP
 o3_avg_tpa    <- ifelse(species_sort[3,]$AV_TPA > 0 & species_sort[3,]$AV_TPA < 1,
@@ -366,6 +355,8 @@ o3_dom_hlth_comp <- paste0(round((filter(health_species_sort,
                                          TR_SP == o3_usda_code)[1,]$AV_TPA /
                                   species_sort[3,]$AV_TPA) * 100), 
                            "%")
+o3_snag_tpa   <- ifelse(species_sort[3,]$SNAG_TPA > 0 & species_sort[3,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[3,]$SNAG_TPA))
 
 o4_usda_code  <- species_sort[4,]$TR_SP
 o4_avg_tpa    <- ifelse(species_sort[4,]$AV_TPA > 0 & species_sort[4,]$AV_TPA < 1,
@@ -379,6 +370,8 @@ o4_dom_hlth_comp <- paste0(round((filter(health_species_sort,
                                          TR_SP == o4_usda_code)[1,]$AV_TPA /
                                   species_sort[4,]$AV_TPA) * 100), 
                            "%")
+o4_snag_tpa   <- ifelse(species_sort[4,]$SNAG_TPA > 0 & species_sort[4,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[4,]$SNAG_TPA))
 
 o5_usda_code  <- species_sort[5,]$TR_SP
 o5_avg_tpa    <- ifelse(species_sort[5,]$AV_TPA > 0 & species_sort[5,]$AV_TPA < 1,
@@ -392,6 +385,8 @@ o5_dom_hlth_comp <- paste0(round((filter(health_species_sort,
                                          TR_SP == o5_usda_code)[1,]$AV_TPA /
                                   species_sort[5,]$AV_TPA) * 100), 
                            "%")
+o5_snag_tpa   <- ifelse(species_sort[5,]$SNAG_TPA > 0 & species_sort[5,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[5,]$SNAG_TPA))
 
 # Top 5 Overstory Species Table
 overstory <- data.frame(usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code, 
@@ -406,7 +401,9 @@ overstory <- data.frame(usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code,
                                      o4_dom_hlth, o5_dom_hlth),
                         dom_hlth_comp = c(o1_dom_hlth_comp, o2_dom_hlth_comp,
                                           o3_dom_hlth_comp, o4_dom_hlth_comp,
-                                          o5_dom_hlth_comp))
+                                          o5_dom_hlth_comp),
+                        snag_tpa = c(o1_snag_tpa, o2_snag_tpa, o3_snag_tpa, 
+                                     o4_snag_tpa, o5_snag_tpa))
 ```
 
 <!--
@@ -728,226 +725,10 @@ Species 3
 
 ## Top 5 Overstory
 
-<!--
-:::::::::::: {#section-4 .group-5-vert}
-
-:::::::: {.section-box}
-::::: {.grid-6w-2h}
-::: {.var-name}
-USDA Code
-:::
-::: {.var-value}
-`r o1_usda_code`
-:::
-::: {.var-name}
-Avg. TPA
-:::
-::: {.var-value}
-`r o1_avg_tpa`
-:::
-::: {.var-name}
-Avg. BA
-:::
-::: {.var-value}
-`r o1_avg_ba`
-:::
-::: {.var-name}
-QM DBH
-:::
-::: {.var-value}
-`r o1_qm_dbh`
-:::
-::: {.var-name}
-Dominant Health Class
-:::
-::: {.var-value}
-`r o1_dom_hlth`
-:::
-::: {.var-name}
-Dominant Health Class Composition
-:::
-::: {.var-value}
-`r o1_dom_hlth_comp`
-:::
-:::::
-::::::::
-
-
-:::::::: {.section-box}
-::::: {.grid-6w-2h}
-::: {.var-name}
-USDA Code
-:::
-::: {.var-value}
-`r o2_usda_code`
-:::
-::: {.var-name}
-Avg. TPA
-:::
-::: {.var-value}
-`r o2_avg_tpa`
-:::
-::: {.var-name}
-Avg. BA
-:::
-::: {.var-value}
-`r o2_avg_ba`
-:::
-::: {.var-name}
-QM DBH
-:::
-::: {.var-value}
-`r o2_qm_dbh`
-:::
-::: {.var-name}
-Dominant Health Class
-:::
-::: {.var-value}
-`r o2_dom_hlth`
-:::
-::: {.var-name}
-Dominant Health Class Composition
-:::
-::: {.var-value}
-`r o2_dom_hlth_comp`
-:::
-:::::
-::::::::
-
-
-:::::::: {.section-box}
-::::: {.grid-6w-2h}
-::: {.var-name}
-USDA Code
-:::
-::: {.var-value}
-`r o3_usda_code`
-:::
-::: {.var-name}
-Avg. TPA
-:::
-::: {.var-value}
-`r o3_avg_tpa`
-:::
-::: {.var-name}
-Avg. BA
-:::
-::: {.var-value}
-`r o3_avg_ba`
-:::
-::: {.var-name}
-QM DBH
-:::
-::: {.var-value}
-`r o3_qm_dbh`
-:::
-::: {.var-name}
-Dominant Health Class
-:::
-::: {.var-value}
-`r o3_dom_hlth`
-:::
-::: {.var-name}
-Dominant Health Class Composition
-:::
-::: {.var-value}
-`r o3_dom_hlth_comp`
-:::
-:::::
-::::::::
-
-
-:::::::: {.section-box}
-::::: {.grid-6w-2h}
-::: {.var-name}
-USDA Code
-:::
-::: {.var-value}
-`r o4_usda_code`
-:::
-::: {.var-name}
-Avg. TPA
-:::
-::: {.var-value}
-`r o4_avg_tpa`
-:::
-::: {.var-name}
-Avg. BA
-:::
-::: {.var-value}
-`r o4_avg_ba`
-:::
-::: {.var-name}
-QM DBH
-:::
-::: {.var-value}
-`r o4_qm_dbh`
-:::
-::: {.var-name}
-Dominant Health Class
-:::
-::: {.var-value}
-`r o4_dom_hlth`
-:::
-::: {.var-name}
-Dominant Health Class Composition
-:::
-::: {.var-value}
-`r o4_dom_hlth_comp`
-:::
-:::::
-::::::::
-
-
-:::::::: {.section-box}
-::::: {.grid-6w-2h}
-::: {.var-name}
-USDA Code
-:::
-::: {.var-value}
-`r o5_usda_code`
-:::
-::: {.var-name}
-Avg. TPA
-:::
-::: {.var-value}
-`r o5_avg_tpa`
-:::
-::: {.var-name}
-Avg. BA
-:::
-::: {.var-value}
-`r o5_avg_ba`
-:::
-::: {.var-name}
-QM DBH
-:::
-::: {.var-value}
-`r o5_qm_dbh`
-:::
-::: {.var-name}
-Dominant Health Class
-:::
-::: {.var-value}
-`r o5_dom_hlth`
-:::
-::: {.var-name}
-Dominant Health Class Composition
-:::
-::: {.var-value}
-`r o5_dom_hlth_comp`
-:::
-:::::
-::::::::
-
-::::::::::::
-
-<!-- Top 5 Overstory Species Table -->
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 kbl(overstory,
     col.names = c("USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
-                  "Dominant Health Class", 
-                  "Dominant Health Class Composition")) %>%
+                  "Dom. Health", "Dom. % Comp.", "Snag TPA")) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", 
                                       "responsive"),
                 full_width = TRUE, 
