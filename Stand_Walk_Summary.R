@@ -156,17 +156,6 @@ tool_exec <- function(in_params, out_params) {
   health_summary         <- add_id(health_summary, level)
   health_summary_species <- add_id(health_summary_species, level)
   
-  message("Input Column names")
-  message("stand_polys_sf: ", colnames(stand_polys_sf))
-  message("age_pts_sf: ", colnames(age_pts_sf))
-  message("fixed_pts_sf: ", colnames(fixed_pts_sf))
-  message("prism_pts_sf: ", colnames(prism_pts_sf))
-  message("age_fixed_summary: ", colnames(age_fixed_summary))
-  message("stand_summary: ", colnames(stand_summary))
-  message("species_summary: ", colnames(species_summary))
-  message("health_summary: ", colnames(health_summary))
-  message("health_summary_species: ", colnames(health_summary_species))
-  
   # Create a `reports` folder in the parent folder that holds the geodatabase
   parent_dir <- dirname(dirname(age_fixed_summary_tbl))
   report_dir <- file.path(parent_dir, "reports")
