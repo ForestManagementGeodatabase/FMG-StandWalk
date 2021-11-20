@@ -1,5 +1,4 @@
 ---
-title: "Stand Recon Sheet"
 output:
   html_document:
     css: style_1.css
@@ -389,7 +388,8 @@ o5_snag_tpa   <- ifelse(species_sort[5,]$SNAG_TPA > 0 & species_sort[5,]$SNAG_TP
                            "<1", floor(species_sort[5,]$SNAG_TPA))
 
 # Top 5 Overstory Species Table
-overstory <- data.frame(usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code, 
+overstory <- data.frame(number = seq.int(1, 5), 
+                        usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code, 
                                       o4_usda_code, o5_usda_code),
                         avg_tpa = c(o1_avg_tpa, o2_avg_tpa, o3_avg_tpa, 
                                     o4_avg_tpa, o5_avg_tpa),
@@ -409,6 +409,8 @@ overstory <- data.frame(usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code,
 <!--
 ## Stand ID
 -->
+
+# Stand Summary: `r SITE_CLEAN`
 
 ::::: {#collector .grid-5w-1h }
 ::: {.var-name}
@@ -726,9 +728,10 @@ Species 3
 ## Top 5 Overstory
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
-kbl(overstory,
-    col.names = c("USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
-                  "Dom. Health", "Dom. % Comp.", "Snag TPA")) %>%
+kbl(na.omit(overstory),
+    col.names = c("#", "USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
+                  "Dom. Health", "Dom. % Comp.", "Snag TPA"),
+    align = rep("l", times = 8)) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", 
                                       "responsive"),
                 full_width = TRUE, 
