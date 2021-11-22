@@ -679,12 +679,12 @@ Species 3
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 kbl(na.omit(overstory),
-    col.names = c("#", "USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
+    col.names = c("", "USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
                   "Dom. Health", "Dom. % Comp.", "Snag TPA"),
     align = rep("l", times = 8)) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", 
                                       "responsive"),
-                font_size = 10,
+                font_size = 11,
                 full_width = TRUE, 
                 position = "left") %>%
   row_spec(0, bold = TRUE)
@@ -694,7 +694,7 @@ kbl(na.omit(overstory),
 `r cat(' ')`
 :::
 
-report version: `r report_version`
+<font size="0.8em">report version: `r report_version`</font>
 
 ::: {.white-box}
 `r cat(' ')`
