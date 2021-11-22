@@ -130,6 +130,16 @@ h2 {
   box-sizing: border-box;
 }
 
+/* Create a transparent box to add vertical whitespace */
+.white-box {
+  height: 20px;
+  width: 200px;
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px solid #ffffff00;
+  background-color: #ffffff00;
+}
+
 /* Control print formating */
 @media print {
   .table-striped tbody tr:nth-of-type(odd) td {
