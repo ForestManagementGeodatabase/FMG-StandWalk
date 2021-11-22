@@ -1,0 +1,61 @@
+---
+output:
+  html_document:
+    css: style_1.css
+params:
+  stand_vector:                     # vector
+  level:                            # string
+  stand_polys:                      # sf
+  age_pts:                          # sf
+  fixed_pts:                        # sf
+  prism_pts:                        # sf
+  age_fixed_summary:                # data frame
+  stand_summary:                    # data frame
+  species_summary:                  # data frame
+  health_summary:                   # data frame
+  health_summary_species:           # data frame
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(sf)
+library(units)
+library(dplyr)
+library(stringr)
+library(lubridate)
+library(tidyr)
+
+report_version <- "0.1.8"
+fmg_dir <- ".."
+fmg_install <- file.path(fmg_dir, "install")
+source(file.path(fmg_install, "FMG_utils.R"))
+
+# Get the species-mast type table
+fmg_dir <- ".."
+fmg_data <- file.path(fmg_dir, "data")
+spp_masttype_file <- file.path(fmg_data, "SppMastType.csv")
+spp_masttype <- read.csv(spp_masttype_file)
+```
+
+# FMG Stand Summaries
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+# Set the heading level for risk items
+stand_heading_level <- 2
+stand_identifier_prefix <- "stand"
+list_stand_item <- TRUE
+
+# Iterate through stands and produce a stand summary report for each stand.
+stand_reports <- lapply(params$stand_summary$Site_ID, function(x) {
+  knitr::knit_child("Stand_Walk_summary_report2.Rmd", 
+                    envir = environment(), 
+                    quiet = TRUE)
+})
+
+# Add page break divs
+page_break_div <- paste(" ", "::: {.page-break}", ":::", " ", sep = "\n")
+page_breaks <- rep(page_break_div, 
+                   length(params$stand_summary$Site_ID))
+
+# Expand the list of risk reports
+cat(unlist(stand_reports), sep = page_breaks)
+```

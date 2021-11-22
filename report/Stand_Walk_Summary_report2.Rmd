@@ -1,0 +1,697 @@
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+age_pts_st   <- dplyr::filter(report_params$age_pts, 
+                              Site_ID == x)
+fixed_pts_st <- dplyr::filter(report_params$fixed_pts, 
+                              Site_ID == x)
+prism_pts_st <- dplyr::filter(report_params$prism_pts, 
+                              Site_ID == x)
+age_fixed_st <- dplyr::filter(report_params$age_fixed_summary, 
+                              Site_ID == x)
+stand_st     <- dplyr::filter(report_params$stand_summary, 
+                              Site_ID == x)
+species_st   <- dplyr::filter(report_params$species_summary, 
+                              Site_ID == x)
+health_st    <- dplyr::filter(report_params$health_summary, 
+                              Site_ID == x)
+hlth_spec_st <- dplyr::filter(report_params$health_summary_species, 
+                              Site_ID == x)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+poly_st <- dplyr::filter(report_params$stand_polys,
+                         Site_ID == x)
+area <- sf::st_area(poly_st)
+acres <- units::set_units(area, acre)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Sort tables
+species_sort <- dplyr::arrange(species_st, desc(AV_BA), desc(AV_TPA), 
+                               desc(QM_DBH))
+health_sort <- dplyr::arrange(health_st, desc(AV_TPA))
+health_species_sort <- dplyr::arrange(hlth_spec_st, desc(AV_TPA))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Set health_summary$TR_HLTH labels
+health_sort$TR_HLTH <- factor(health_sort$TR_HLTH,
+                              levels = c("H", "S", "SD", "D"),
+                              labels = c("Healthy", "Stressed", 
+                                         "Significant Decline", "Dead"))
+health_species_sort$TR_HLTH <- factor(health_species_sort$TR_HLTH,
+                                      levels = c("H", "S", "SD", "D"),
+                                      labels = c("Healthy", "Stressed", 
+                                                 "Significant Decline", "Dead"))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Calculate hard mast stats
+## Get list of hard mast species
+hard_mast_spp <- dplyr::filter(spp_masttype, MAST_TYPE == "HARD")
+
+## Filter species_st for only hard mast species
+species_hard_mast <- dplyr::filter(species_st, TR_SP %in% hard_mast_spp$TR_SP)
+
+# Calculate hard mast tpa sum 
+hard_mast_tpa_sum <- sum(species_hard_mast$AV_TPA)
+
+# Calculate hard mast ba sum
+hard_mast_ba_sum <- sum(species_hard_mast$AV_BA)
+
+# Calculate hard mast QM_DBH
+hard_mast_BA_TPA <- (hard_mast_ba_sum/hard_mast_tpa_sum)
+hard_mast_QM_DBH <- sqrt(hard_mast_BA_TPA/0.005454154)
+
+# Count of hard mast species
+hard_mast_spp_count <- length(species_hard_mast$TR_SP)
+
+# Filter age_pts_st for only hard mast species
+age_hard_mast <- dplyr::filter(age_pts_st, AGE_SP %in% hard_mast_spp$TR_SP)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Set stocking parameters (Larsen et al., 2010)
+amd_p1 <- 0.259
+amd_p2 <- 0.973
+
+a_line_p1 <- 0.0685724
+a_line_p2 <- 0.0010125
+a_line_p3 <- 0.0023656
+
+# QMD to AMD conversion
+amd <- amd_p1 + (amd_p2 * stand_st$QM_DBH)
+
+# Calculate stocking
+stocking <- stand_st$AV_TPA * 
+            (a_line_p1 + a_line_p2 * amd + a_line_p3 * stand_st$QM_DBH^2)
+
+stocking_pct <- paste0(round(stocking, 0), "%")
+stocking_pct <- ifelse(stocking < 10, "<10%", stocking_pct)
+stocking_pct <- ifelse(stocking > 110, ">110%", stocking_pct)
+
+# Calculate hard mast stocking
+hm_stocking <- hard_mast_tpa_sum *
+               (a_line_p1 + a_line_p2 * amd + a_line_p3 * hard_mast_QM_DBH^2)
+
+hm_stocking_pct <- paste0(round(hm_stocking, 0), "%")
+hm_stocking_pct <- ifelse(hm_stocking < 10, "<10%", hm_stocking_pct)
+hm_stocking_pct <- ifelse(hm_stocking > 110, ">110%", hm_stocking_pct)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+## Clean up `Site_ID` to make it easier to parse
+SITE_CLEAN <- str_replace(stand_st$Site_ID, "st", "t")
+
+## Match alpha hierarchy delimiter (p, c, u, t, s), then digits, 0 or more (\\d*)
+pool_label  <- stringr::str_match(SITE_CLEAN, "p\\d*")[1]
+comp_label  <- stringr::str_match(SITE_CLEAN, "c\\d*")[1]
+unit_label  <- stringr::str_match(SITE_CLEAN, "u\\d*")[1]
+site_label  <- stringr::str_match(SITE_CLEAN, "t\\d*")[1]
+stand_label <- stringr::str_match(SITE_CLEAN, "s\\d*")[1]
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Calculate species richness
+## Typical Species
+## Get list of 'typical' species
+typical_spp <- dplyr::filter(spp_masttype, TYPICAL == "COMMON")
+
+## Filter species_st for only 'typical' species
+species_typical <- dplyr::filter(species_st, TR_SP %in% typical_spp$TR_SP)
+
+## Count 'typical' species
+typical_spp_count <- length(species_typical$TR_SP)
+
+## Other Species
+## Get list of 'other' species
+other_spp <- dplyr::filter(spp_masttype, MAST_TYPE != "HARD",
+                                         TYPICAL != "COMMON")
+## Filter species_st for only 'other' species
+species_other <- dplyr::filter(species_st, TR_SP %in% other_spp$TR_SP)
+
+## Count 'typical' species
+other_spp_count <- length(species_other$TR_SP)
+
+## Create "Species Richness" string
+species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_count)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Simplify fixed_pts_st to just understory species fields
+fixed_understory <- fixed_pts_st[, c("PLOT", "UND_SP1", "UND_SP2", "UND_SP3")]
+# Drop factors
+fixed_understory$UND_SP1 <- as.character(fixed_understory$UND_SP1)
+fixed_understory$UND_SP2 <- as.character(fixed_understory$UND_SP2)
+fixed_understory$UND_SP3 <- as.character(fixed_understory$UND_SP3)
+# Drop geometry
+fixed_understory <- sf::st_drop_geometry(fixed_understory)
+# Set missing data to NA
+fixed_understory <- set_na(fixed_understory)
+# Convert to long format by combining `UND_SP*` fields into a single field
+understory <- tidyr::pivot_longer(data = fixed_understory,
+                                  cols = -PLOT,
+                                  names_to = c(".value", "SP"),
+                                  names_sep = "_",
+                                  values_drop_na = TRUE)
+# Group by understory species
+understory_species <- dplyr::group_by(understory, UND)
+# Count understory species
+understory_species_count <- dplyr::summarize(understory_species, 
+                                             count = n())
+# Sort 
+understory_species_count <- dplyr::arrange(understory_species_count, desc(count))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Simplify fixed_pts_st to just ground species fields
+fixed_ground <- fixed_pts_st[, c("PLOT", "GRD_SP1", "GRD_SP2", "GRD_SP3")]
+# Drop factors
+fixed_ground$GRD_SP1 <- as.character(fixed_ground$GRD_SP1)
+fixed_ground$GRD_SP2 <- as.character(fixed_ground$GRD_SP2)
+fixed_ground$GRD_SP3 <- as.character(fixed_ground$GRD_SP3)
+# Drop geometry
+fixed_ground <- sf::st_drop_geometry(fixed_ground)
+# Set missing data to NA
+fixed_ground <- set_na(fixed_ground)
+# Convert to long format by combining `GRD_SP*` fields into a single field
+ground <- tidyr::pivot_longer(data = fixed_ground,
+                              cols = -PLOT,
+                              names_to = c(".value", "SP"),
+                              names_sep = "_",
+                              values_drop_na = TRUE)
+# Group by understory species
+ground_species <- dplyr::group_by(ground, GRD)
+# Count understory species
+ground_species_count <- dplyr::summarize(ground_species, 
+                                         count = n())
+# Sort 
+ground_species_count <- dplyr::arrange(ground_species_count, desc(count))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# collector
+forester <- ""
+date <- ""
+
+# stand_id
+pool           <- pool_label
+compartment    <- comp_label
+unit           <- unit_label
+site           <- site_label
+stand          <- stand_label
+num_plots      <- stand_st$NUM_PL
+num_age_plots  <- length(age_pts_st$PLOT)
+walk_acres     <- round(acres, 0)
+inventory_year <- unique(lubridate::year(fixed_pts_st$FP_DATE))
+dom_soil_type  <- NA                                  # new tool will calculate
+
+# stand-summary-data
+tpa              <- ifelse(stand_st$AV_TPA > 0 & stand_st$AV_TPA < 1, "<1", 
+                           floor(stand_st$AV_TPA))
+basal_area       <- ifelse(stand_st$AV_BA > 0 & stand_st$AV_BA < 1, "<1", 
+                           floor(stand_st$AV_BA))
+qm_dbh           <- paste0(floor(stand_st$QM_DBH), '"')
+stocking         <- stocking_pct
+canopy_height    <- paste0(round(age_fixed_st$OV_HT/5)*5, "'")    # nearest 5 ft
+canopy_closure   <- paste0(round(age_fixed_st$OV_CLSR, -1), "%")  # nearest 10 %
+hard_mast_tpa    <- dplyr::if_else(hard_mast_tpa_sum > 0 & hard_mast_tpa_sum < 1,
+                                   "<1", 
+                                   as.character(floor(hard_mast_tpa_sum)), "0")
+hard_mast_ba     <- dplyr::if_else(hard_mast_ba_sum > 0 & hard_mast_ba_sum < 1,
+                                   "<1", 
+                                   as.character(floor(hard_mast_ba_sum)), "0")
+hard_mast_qm_dbh <- paste0(floor(hard_mast_QM_DBH), '"')
+hard_mast_stock  <- hm_stocking_pct                    
+under_height     <- paste0(round(age_fixed_st$UND_HT, 0), "'")
+snag_tpa         <- ifelse(stand_st$SNAG_TPA > 0 & stand_st$SNAG_TPA < 1, "<1",                                floor(stand_st$SNAG_TPA))
+stand_age        <- floor(age_fixed_st$TR_AGE)
+hard_mast_age    <- mean(age_hard_mast$AGE_ORIG)
+growth           <- floor(mean(age_pts_st$AGE_GRW))
+stand_health     <- health_sort[1,]$TR_HLTH
+species_rich     <- species_richness
+regen_rate       <- ifelse(age_fixed_st$UND_COV > 0 & age_fixed_st$UND_COV < 1,
+                           "<1", floor(age_fixed_st$UND_COV))
+
+# Size Class
+sapling_tpa      <- floor(stand_st$SAP_TPA)
+polesize_tpa     <- floor(stand_st$POL_TPA)
+sawtimber_tpa    <- floor(stand_st$SAW_TPA)
+mature_tpa       <- floor(stand_st$MAT_TPA)
+overmature_tpa   <- floor(stand_st$OVM_TPA)
+sapling_ba       <- NA                                    # added in the future
+polesize_ba      <- NA                                    # added in the future
+sawtimber_ba     <- NA                                    # added in the future
+mature_ba        <- NA                                    # added in the future
+overmature_ba    <- NA                                    # added in the future
+
+# Top 3 Understory Species
+under_species_1 <- understory_species_count$UND[1]
+under_species_2 <- understory_species_count$UND[2]
+under_species_3 <- understory_species_count$UND[3]
+
+# Top 3 Ground Species
+ground_species_1 <- ground_species_count$GRD[1]
+ground_species_2 <- ground_species_count$GRD[2]
+ground_species_3 <- ground_species_count$GRD[3]
+
+# Top 5 Overstory Species
+o1_usda_code  <- species_sort[1,]$TR_SP
+o1_avg_tpa    <- ifelse(species_sort[1,]$AV_TPA > 0 & species_sort[1,]$AV_TPA < 1,
+                           "<1", floor(species_sort[1,]$AV_TPA))
+o1_avg_ba     <- ifelse(species_sort[1,]$AV_BA > 0 & species_sort[1,]$AV_BA < 1,
+                           "<1", floor(species_sort[1,]$AV_BA))
+o1_qm_dbh     <- paste0(floor(species_sort[1,]$QM_DBH), '"')
+o1_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o1_usda_code)[1,]$TR_HLTH)
+o1_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
+                                         TR_SP == o1_usda_code)[1,]$AV_TPA /
+                                  species_sort[1,]$AV_TPA) * 100), 
+                           "%")
+o1_snag_tpa   <- ifelse(species_sort[1,]$SNAG_TPA > 0 & species_sort[1,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[1,]$SNAG_TPA))
+
+o2_usda_code  <- species_sort[2,]$TR_SP
+
+o2_avg_tpa    <- ifelse(species_sort[2,]$AV_TPA > 0 & species_sort[2,]$AV_TPA < 1,
+                           "<1", floor(species_sort[2,]$AV_TPA))
+o2_avg_ba     <- ifelse(species_sort[2,]$AV_BA > 0 & species_sort[2,]$AV_BA < 1,
+                           "<1", floor(species_sort[2,]$AV_BA))
+o2_qm_dbh     <- paste0(floor(species_sort[2,]$QM_DBH), '"')
+o2_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o2_usda_code)[1,]$TR_HLTH)
+o2_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
+                                         TR_SP == o2_usda_code)[1,]$AV_TPA /
+                                  species_sort[2,]$AV_TPA) * 100), 
+                           "%")
+o2_snag_tpa   <- ifelse(species_sort[2,]$SNAG_TPA > 0 & species_sort[2,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[2,]$SNAG_TPA))
+
+o3_usda_code  <- species_sort[3,]$TR_SP
+o3_avg_tpa    <- ifelse(species_sort[3,]$AV_TPA > 0 & species_sort[3,]$AV_TPA < 1,
+                           "<1", floor(species_sort[3,]$AV_TPA))
+o3_avg_ba     <- ifelse(species_sort[3,]$AV_BA > 0 & species_sort[3,]$AV_BA < 1,
+                           "<1", floor(species_sort[3,]$AV_BA))
+o3_qm_dbh     <- paste0(floor(species_sort[3,]$QM_DBH), '"')
+o3_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o3_usda_code)[1,]$TR_HLTH)
+o3_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
+                                         TR_SP == o3_usda_code)[1,]$AV_TPA /
+                                  species_sort[3,]$AV_TPA) * 100), 
+                           "%")
+o3_snag_tpa   <- ifelse(species_sort[3,]$SNAG_TPA > 0 & species_sort[3,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[3,]$SNAG_TPA))
+
+o4_usda_code  <- species_sort[4,]$TR_SP
+o4_avg_tpa    <- ifelse(species_sort[4,]$AV_TPA > 0 & species_sort[4,]$AV_TPA < 1,
+                           "<1", floor(species_sort[4,]$AV_TPA))
+o4_avg_ba     <- ifelse(species_sort[4,]$AV_BA > 0 & species_sort[4,]$AV_BA < 1,
+                           "<1", floor(species_sort[4,]$AV_BA))
+o4_qm_dbh     <- paste0(floor(species_sort[4,]$QM_DBH), '"')
+o4_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o4_usda_code)[1,]$TR_HLTH)
+o4_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
+                                         TR_SP == o4_usda_code)[1,]$AV_TPA /
+                                  species_sort[4,]$AV_TPA) * 100), 
+                           "%")
+o4_snag_tpa   <- ifelse(species_sort[4,]$SNAG_TPA > 0 & species_sort[4,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[4,]$SNAG_TPA))
+
+o5_usda_code  <- species_sort[5,]$TR_SP
+o5_avg_tpa    <- ifelse(species_sort[5,]$AV_TPA > 0 & species_sort[5,]$AV_TPA < 1,
+                           "<1", floor(species_sort[5,]$AV_TPA))
+o5_avg_ba     <- ifelse(species_sort[5,]$AV_BA > 0 & species_sort[5,]$AV_BA < 1,
+                           "<1", floor(species_sort[5,]$AV_BA))
+o5_qm_dbh     <- paste0(floor(species_sort[5,]$QM_DBH),'"')
+o5_dom_hlth   <- as.character(filter(health_species_sort, 
+                                     TR_SP == o5_usda_code)[1,]$TR_HLTH)
+o5_dom_hlth_comp <- paste0(round((filter(health_species_sort, 
+                                         TR_SP == o5_usda_code)[1,]$AV_TPA /
+                                  species_sort[5,]$AV_TPA) * 100), 
+                           "%")
+o5_snag_tpa   <- ifelse(species_sort[5,]$SNAG_TPA > 0 & species_sort[5,]$SNAG_TPA < 1,
+                           "<1", floor(species_sort[5,]$SNAG_TPA))
+
+# Top 5 Overstory Species Table
+overstory <- data.frame(number = seq.int(1, 5), 
+                        usda_code = c(o1_usda_code, o2_usda_code, o3_usda_code, 
+                                      o4_usda_code, o5_usda_code),
+                        avg_tpa = c(o1_avg_tpa, o2_avg_tpa, o3_avg_tpa, 
+                                    o4_avg_tpa, o5_avg_tpa),
+                        avg_ba = c(o1_avg_ba, o2_avg_ba, o3_avg_ba,
+                                   o4_avg_ba, o5_avg_ba),
+                        qm_dbh = c(o1_qm_dbh, o2_qm_dbh, o3_qm_dbh,
+                                   o4_qm_dbh, o5_qm_dbh),
+                        dom_hlth = c(o1_dom_hlth, o2_dom_hlth, o3_dom_hlth,
+                                     o4_dom_hlth, o5_dom_hlth),
+                        dom_hlth_comp = c(o1_dom_hlth_comp, o2_dom_hlth_comp,
+                                          o3_dom_hlth_comp, o4_dom_hlth_comp,
+                                          o5_dom_hlth_comp),
+                        snag_tpa = c(o1_snag_tpa, o2_snag_tpa, o3_snag_tpa, 
+                                     o4_snag_tpa, o5_snag_tpa))
+```
+
+
+::: {.header}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+pandoc_header(text = stand_st$Site_ID, 
+              level = stand_heading_level,
+              identifier = paste0(stand_identifier_prefix, "-",
+                                  str_to_lower(stand_st$Site_ID)),
+              number = FALSE,
+              list = list_stand_item)
+```
+:::
+
+
+::::: {#collector .grid-5w-1h }
+::: {.var-name}
+Forester
+:::
+::: {.empty-box}
+`r forester`
+:::
+::: {.var-name}
+Date
+:::
+::: {.empty-box}
+`r date`
+:::
+:::::
+
+::::: {#stand_id_1 .grid-5w-2h}
+::: {.var-name}
+FMG Pool
+:::
+::: {.var-value}
+`r pool`
+:::
+::: {.var-name}
+FMG Compartment
+:::
+::: {.var-value}
+`r compartment`
+:::
+::: {.var-name}
+FMG Unit
+:::
+::: {.var-value}
+`r unit`
+:::
+::: {.var-name}
+FMG Site 
+:::
+::: {.var-value}
+`r site`
+:::
+::: {.var-name}
+FMG Stand 
+:::
+::: {.var-value}
+`r stand`
+:::
+:::::
+
+::::: {#stand_id_2 .grid-5w-2h}
+::: {.var-name}
+\# of Plots
+:::
+::: {.var-value}
+`r num_plots`
+:::
+::: {.var-name}
+\# Age Plots
+:::
+::: {.var-value}
+`r num_age_plots`
+:::
+::: {.var-name}
+Area (acre)
+:::
+::: {.var-value}
+`r walk_acres`
+:::
+::: {.var-name}
+Inventory Year
+:::
+::: {.var-value}
+`r inventory_year`
+:::
+::: {.var-name}
+Dominant Soil Type
+:::
+::: {.var-value}
+`r dom_soil_type`
+:::
+:::::
+
+
+## Stand Summary Data
+
+::::: {#stand-summary-data .grid-6w-6h}
+::: {.var-name}
+Trees per Acre
+:::
+::: {.var-value}
+`r tpa`
+:::
+::: {.var-name}
+Hard Mast TPA
+:::
+::: {.var-value}
+`r hard_mast_tpa`
+:::
+::: {.var-name}
+Stand Age
+:::
+::: {.var-value}
+`r stand_age`
+:::
+::: {.var-name}
+Basal Area
+:::
+::: {.var-value}
+`r basal_area`
+:::
+::: {.var-name}
+Hard Mast BA
+:::
+::: {.var-value}
+`r hard_mast_ba`
+:::
+::: {.var-name}
+Hard Mast Age
+:::
+::: {.var-value}
+`r hard_mast_age`
+:::
+::: {.var-name}
+QM DBH
+:::
+::: {.var-value}
+`r qm_dbh`
+:::
+::: {.var-name}
+Hard Mast QM DBH
+:::
+::: {.var-value}
+`r hard_mast_qm_dbh`
+:::
+::: {.var-name}
+Growth
+:::
+::: {.var-value}
+`r growth`
+:::
+::: {.var-name}
+Stocking
+:::
+::: {.var-value}
+`r stocking`
+:::
+::: {.var-name}
+Hard Mast Stocking
+:::
+::: {.var-value}
+`r hard_mast_stock`
+:::
+::: {.var-name}
+Stand Health
+:::
+::: {.var-value}
+`r stand_health`
+:::
+::: {.var-name}
+Canopy Height
+:::
+::: {.var-value}
+`r canopy_height`
+:::
+::: {.var-name}
+Understory Height
+:::
+::: {.var-value}
+`r under_height`
+:::
+::: {.var-name}
+Species Richness
+:::
+::: {.var-value}
+`r species_rich`
+:::
+::: {.var-name}
+Canopy Closure
+::: 
+::: {.var-value}
+`r canopy_closure`
+:::
+::: {.var-name}
+Snag TPA
+:::
+::: {.var-value}
+`r snag_tpa`
+:::
+::: {.var-name}
+Regeneration Rate
+:::
+::: {.var-value}
+`r regen_rate`
+:::
+:::::
+
+:::::::::::: {#section-3 .group-3-horz}
+
+:::::::: {.section-box}
+## Size Class
+::::: {.grid-3w-6h}
+::: {.var-name}
+Class
+:::
+::: {.var-name}
+TPA
+:::
+::: {.var-name}
+BA
+:::
+::: {.var-name}
+Sapling (1"-5")
+:::
+::: {.var-value}
+`r sapling_tpa`
+:::
+::: {.var-value}
+`r sapling_ba`
+:::
+::: {.var-name}
+Polesize (5"-12")
+:::
+::: {.var-value}
+`r polesize_tpa`
+:::
+::: {.var-value}
+`r polesize_ba`
+:::
+::: {.var-name}
+Sawtimber (12"-18")
+:::
+::: {.var-value}
+`r sawtimber_tpa`
+:::
+::: {.var-value}
+`r sawtimber_ba`
+:::
+::: {.var-name}
+Mature (18"-24")
+:::
+::: {.var-value}
+`r mature_tpa`
+:::
+::: {.var-value}
+`r mature_ba`
+:::
+::: {.var-name}
+Overmature (24"+)
+:::
+::: {.var-value}
+`r overmature_tpa`
+:::
+::: {.var-value}
+`r overmature_ba`
+:::
+:::::
+::::::::
+
+:::::::: {.section-box}
+## Top 3 Understory
+::::: {.grid-2w-4h}
+::: {.var-name}
+Species 1
+:::
+::: {.var-value}
+`r under_species_1`
+:::
+::: {.var-name}
+Species 2
+:::
+::: {.var-value}
+`r under_species_2`
+:::
+::: {.var-name}
+Species 3
+:::
+::: {.var-value}
+`r under_species_3`
+:::
+:::::
+::::::::
+
+:::::::: {.section-box}
+## Top 3 Ground
+::::: {.grid-2w-4h}
+::: {.var-name}
+Species 1
+:::
+::: {.var-value}
+`r ground_species_1`
+:::
+::: {.var-name}
+Species 2
+:::
+::: {.var-value}
+`r ground_species_2`
+:::
+::: {.var-name}
+Species 3
+:::
+::: {.var-value}
+`r ground_species_3`
+:::
+:::::
+::::::::
+::::::::::::
+
+## Top 5 Overstory
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+kbl(na.omit(overstory),
+    col.names = c("#", "USDA Code", "Avg. TPA", "Avg. BA", "QM DBH", 
+                  "Dom. Health", "Dom. % Comp.", "Snag TPA"),
+    align = rep("l", times = 8)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", 
+                                      "responsive"),
+                font_size = 10,
+                full_width = TRUE, 
+                position = "left") %>%
+  row_spec(0, bold = TRUE)
+```
+
+::: {.white-box}
+`r cat(' ')`
+:::
+
+report version: `r report_version`
+
+::: {.white-box}
+`r cat(' ')`
+:::
