@@ -1,5 +1,6 @@
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Filter for current stand
 age_pts_st   <- dplyr::filter(report_params$age_pts, 
                               Site_ID == x)
 fixed_pts_st <- dplyr::filter(report_params$fixed_pts, 
@@ -19,6 +20,7 @@ hlth_spec_st <- dplyr::filter(report_params$health_summary_species,
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Calculate area
 poly_st <- dplyr::filter(report_params$stand_polys,
                          Site_ID == x)
 area <- sf::st_area(poly_st)
@@ -71,6 +73,7 @@ age_hard_mast <- dplyr::filter(age_pts_st, AGE_SP %in% hard_mast_spp$TR_SP)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Stocking
 # Set stocking parameters (Larsen et al., 2010)
 amd_p1 <- 0.259
 amd_p2 <- 0.973
@@ -88,7 +91,7 @@ stocking <- stand_st$AV_TPA *
 
 stocking_pct <- paste0(round(stocking, 0), "%")
 stocking_pct <- ifelse(stocking < 10, "<10%", stocking_pct)
-stocking_pct <- ifelse(stocking > 110, ">110%", stocking_pct)
+stocking_pct <- ifelse(stocking > 110, "&gt;110%", stocking_pct)
 
 # Calculate hard mast stocking
 hm_stocking <- hard_mast_tpa_sum *
@@ -96,8 +99,7 @@ hm_stocking <- hard_mast_tpa_sum *
 
 hm_stocking_pct <- paste0(round(hm_stocking, 0), "%")
 hm_stocking_pct <- ifelse(hm_stocking < 10, "<10%", hm_stocking_pct)
-hm_stocking_pct <- ifelse(hm_stocking > 110, ">110%", hm_stocking_pct)
-
+hm_stocking_pct <- ifelse(hm_stocking > 110, "&gt;110%", hm_stocking_pct)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -139,6 +141,7 @@ species_richness <- paste0(hard_mast_spp_count, other_spp_count, typical_spp_cou
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Understory
 # Simplify fixed_pts_st to just understory species fields
 fixed_understory <- fixed_pts_st[, c("PLOT", "UND_SP1", "UND_SP2", "UND_SP3")]
 # Drop factors
@@ -165,6 +168,7 @@ understory_species_count <- dplyr::arrange(understory_species_count, desc(count)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Ground
 # Simplify fixed_pts_st to just ground species fields
 fixed_ground <- fixed_pts_st[, c("PLOT", "GRD_SP1", "GRD_SP2", "GRD_SP3")]
 # Drop factors
