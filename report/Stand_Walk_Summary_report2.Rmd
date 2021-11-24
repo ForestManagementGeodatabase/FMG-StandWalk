@@ -115,6 +115,12 @@ stand_label <- stringr::str_match(SITE_CLEAN, "s\\d*")[1]
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Calculate TPA (to exclude dead trees)
+tpa <- floor(stand_st$SAP_TPA + stand_st$POL_TPA + stand_st$SAW_TPA + 
+             stand_st$MAT_TPA + stand_st$OVM_TPA)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Calculate species richness
 ## Typical Species
 ## Get list of 'typical' species
@@ -212,8 +218,7 @@ inventory_year <- unique(lubridate::year(fixed_pts_st$FP_DATE))
 dom_soil_type  <- NA                                  # new tool will calculate
 
 # stand-summary-data
-tpa              <- ifelse(stand_st$AV_TPA > 0 & stand_st$AV_TPA < 1, "<1", 
-                           floor(stand_st$AV_TPA))
+tpa              <- ifelse(tpa > 0 & tpa < 1, "<1", floor(tpa))
 basal_area       <- ifelse(stand_st$AV_BA > 0 & stand_st$AV_BA < 1, "<1", 
                            floor(stand_st$AV_BA))
 qm_dbh           <- paste0(floor(stand_st$QM_DBH), '"')
