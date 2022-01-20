@@ -46,7 +46,7 @@ list_stand_item <- TRUE
 
 # Iterate through stands and produce a stand summary report for each stand.
 stand_reports <- lapply(params$stand_summary$Site_ID, function(x) {
-  knitr::knit_child("Stand_Walk_summary_report2.Rmd", 
+  knitr::knit_child("Stand_Walk_summary_report.Rmd", 
                     envir = environment(), 
                     quiet = TRUE)
 })
