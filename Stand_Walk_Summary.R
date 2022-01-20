@@ -61,27 +61,40 @@ tool_exec <- function(in_params, out_params) {
   health_species_summary_tbl <- in_params[[10]]
   
   # Code for testing in RStudio
-  library(dplyr)
-  library(tibble)
-  library(stringr)
-  library(lubridate)
-  library(tidyr)
-  library(sf)
-  library(kableExtra)
-  library(pander)
-  dir_name                   <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk"
+  # library(dplyr)
+  # library(tibble)
+  # library(stringr)
+  # library(lubridate)
+  # library(tidyr)
+  # library(sf)
+  # library(kableExtra)
+  # library(pander)
+  #dir_name                   <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk"
   # Site based summaries
-  project                    <- "Pool 12 Forestry"
-  level                      <- "site"
-  stand_polys                <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Pool12_ForestInventory_Sites_Base"
-  age_pts                    <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Age"
-  fixed_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Fixed"
-  prism_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Prism"
-  stand_summary_tbl          <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\PPool12_TimberInventory_ForReconReport.gdb\\Site_Stand_Summary"
-  age_fixed_summary_tbl      <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_AgeFixed_Summary"
-  species_summary_tbl        <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Species_Summary"
-  health_summary_tbl         <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary"
-  health_summary_species_tbl <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary_BySpecies"
+  # project                    <- "Pool 13 Forestry"
+  # level                      <- "site"
+  # stand_polys                <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\FMG_Site"
+  # age_pts                    <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Age_Plots"
+  # fixed_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Fixed_Plots"
+  # prism_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Prism_Plots"
+  # stand_summary_tbl          <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Site_Stand_Summary"
+  # age_fixed_summary_tbl      <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Site_AgeFixed_Summary"
+  # species_summary_tbl        <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Site_Species_Summary"
+  # health_summary_tbl         <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Site_Health_Summary"
+  # health_summary_species_tbl <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_13_Lower\\HSI.gdb\\Site_Health_Summary_BySpecies"
+  #
+  # project                    <- "Pool 12 Forestry"
+  # level                      <- "site"
+  # stand_polys                <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Pool12_ForestInventory_Sites"
+  # age_pts                    <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Age"
+  # fixed_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Fixed"
+  # prism_pts                  <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Final_Pool12_Prism"
+  # stand_summary_tbl          <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\PPool12_TimberInventory_ForReconReport.gdb\\Site_Stand_Summary"
+  # age_fixed_summary_tbl      <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_AgeFixed_Summary"
+  # species_summary_tbl        <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Species_Summary"
+  # health_summary_tbl         <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary"
+  # health_summary_species_tbl <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary_BySpecies"
+  # 
   # # Stand based summaries
   # project                   <- "Pecan Grove"
   # level                     <- "stand"
@@ -133,7 +146,7 @@ tool_exec <- function(in_params, out_params) {
   health_summary    <- sf::st_read(dsn = gdb,
                                    layer = basename(health_summary_tbl))
   health_summary_species <- sf::st_read(dsn = gdb,
-                                        layer = basename(health_summary_species_tbl))
+                                  layer = basename(health_summary_species_tbl))
   
   # Fix FMG unique id fields
   stand_polys_sf    <- fix_fmg_id(stand_polys_sf)
@@ -165,7 +178,7 @@ tool_exec <- function(in_params, out_params) {
   }
   output_file <- file.path(report_dir, "index.html")
   report_template <- file.path(dir_name, "report", 
-                               "Stand_Walk_Summary_list2.Rmd")
+                               "Stand_Walk_Summary_list.Rmd")
   
   # Set report parameters
   report_params <- list("level" = level,
