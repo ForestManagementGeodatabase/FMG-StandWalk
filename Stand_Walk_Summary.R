@@ -69,7 +69,7 @@ tool_exec <- function(in_params, out_params) {
   # library(sf)
   # library(kableExtra)
   # library(pander)
-  #dir_name                   <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk"
+  # dir_name                   <- "C:/workspace/FMG/FMG-StandWalk"
   # Site based summaries
   # project                    <- "Pool 13 Forestry"
   # level                      <- "site"
@@ -94,6 +94,42 @@ tool_exec <- function(in_params, out_params) {
   # species_summary_tbl        <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Species_Summary"
   # health_summary_tbl         <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary"
   # health_summary_species_tbl <- "C:\\Workspace\\FMG\\Stand_Walk_Sheets\\FMG_StandWalk\\test\\Pool_12_Forestry\\Pool12_TimberInventory_ForReconReport.gdb\\Site_Health_Summary_BySpecies"
+  # 
+  # project                    <- "Pool 21"
+  # level                      <- "site"
+  # stand_polys                <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Pool21_Site")
+  # age_pts                    <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Pool21_Age")
+  # fixed_pts                  <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Pool21_Fixed")
+  # prism_pts                  <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Pool21_Prism")
+  # stand_summary_tbl          <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Site_Stand_Summary")
+  # age_fixed_summary_tbl      <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Site_AgeFixed_Summary")
+  # species_summary_tbl        <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Site_Species_Summary")
+  # health_summary_tbl         <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Site_Health_Summary")
+  # health_summary_species_tbl <- file.path(dir_name, "test/Pool_21/Pool21_ReconSheets.gdb/Site_Health_Summary_BySpecies")
+  #
+  # project                    <- "Pool 14"
+  # level                      <- "site"
+  # stand_polys                <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Sites")
+  # age_pts                    <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Age_Plots")
+  # fixed_pts                  <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Fixed_Plots")
+  # prism_pts                  <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Prism_Plots")
+  # stand_summary_tbl          <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Site_Stand_Summary")
+  # age_fixed_summary_tbl      <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Site_AgeFixed_Summary")
+  # species_summary_tbl        <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Site_Species_Summary")
+  # health_summary_tbl         <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Site_Health_Summary")
+  # health_summary_species_tbl <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Site_Health_Summary_BySpecies")
+  #
+  # project                    <- "Pool 14"
+  # level                      <- "stand"
+  # stand_polys                <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stands")
+  # age_pts                    <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Age_Plots")
+  # fixed_pts                  <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Fixed_Plots")
+  # prism_pts                  <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Prism_Plots")
+  # stand_summary_tbl          <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stand_Stand_Summary")
+  # age_fixed_summary_tbl      <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stand_AgeFixed_Summary")
+  # species_summary_tbl        <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stand_Species_Summary")
+  # health_summary_tbl         <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stand_Health_Summary")
+  # health_summary_species_tbl <- file.path(dir_name, "test/Pool_14_WapsiBottoms/P14_Wapsi_20220330.gdb/Stand_Health_Summary_BySpecies")
   # 
   # # Stand based summaries
   # project                   <- "Pecan Grove"
