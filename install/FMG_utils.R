@@ -186,12 +186,12 @@ fix_fmg_id <- function(df) {
     df <- dplyr::rename(df, Site_ID = SiteID)
   }
 
-  # Rename the previous versions of the `PLOT` field
+  # Update previous versions of the `PLOT` field
   if("Plot" %in% colnames(df)) {
     df <- dplyr::rename(df, PLOT = Plot)
   }
   if("PL_NUM" %in% colnames(df)) {
-    df <- dplyr::rename(df, PLOT = PL_NUM)
+    df <- dplyr::mutate(df, PLOT = PL_NUM)
   }
   
   return(df)
@@ -208,8 +208,16 @@ add_id <- function(df, level) {
     df <- dplyr::mutate(df, Site_ID = SID)
     
   } else if(level == "site") {
-    df <- dplyr::mutate(df, Site_ID = SITE)
+    if("SITE" %in% colnames(df)) {
+      df <- dplyr::mutate(df, Site_ID = SITE)
+    }
+    if(!("Site" %in% colnames(df))) {
+      df <- dplyr::mutate(df, Site = Site_ID)
+      df <- dplyr::mutate(df, Site_ID = Site)
+    }
+    
   }
+  return(df)
 }
 
 
