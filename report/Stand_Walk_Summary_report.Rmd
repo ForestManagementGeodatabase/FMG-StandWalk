@@ -114,6 +114,17 @@ site_label  <- stringr::str_match(SITE_CLEAN, "t\\d*")[1]
 stand_label <- stringr::str_match(SITE_CLEAN, "s\\d*")[1]
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
+# Testing new code for calc SAP_TPA in report
+# tree_prism <- prism_pts_st %>%
+#   filter(between(TR_DIA, 0, 4))
+#   # also filter for health
+# dens <- 10 / (tree_prism$TR_DIA^2 * 0.005454)
+# dens_sum <- sum(dens)
+# SAP_TPA <- dens_sum / stand_st$NUM_PL
+# SAP_TPA <- tpa(prism_table, 1, 5)
+```
+
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Calculate TPA (to exclude dead trees)
 tpa <- floor(stand_st$SAP_TPA + stand_st$POL_TPA + stand_st$SAW_TPA + 
