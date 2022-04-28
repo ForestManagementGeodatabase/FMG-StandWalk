@@ -215,7 +215,9 @@ add_id <- function(df, level) {
       df <- dplyr::mutate(df, Site = Site_ID)
       df <- dplyr::mutate(df, Site_ID = Site)
     }
-    
+    if("Site" %in% colnames(df)) {
+      df <- dplyr::mutate(df, Site_ID = Site)
+    }
   }
   return(df)
 }
