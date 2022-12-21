@@ -20,7 +20,8 @@
 #' @param age_fixed_summary_tbl  .gdb table; A FMG age & fixed plot summary 
 #'                               table.
 #' @param species_summary_tbl    .gdb table; A FMG species summary table.
-#' @param health_summary_tbl     .gdb table; A FMG Health summary table.
+#' @param health_summary_tbl     .gdb table; A FMG Health summary By Species
+#'                               table.
 #'                               
 #' @details  This tool creates a folder named `reports` in the folder where the 
 #' `stand_summary_tbl` is located. A Stand Walk Summary Report is written into 
@@ -35,7 +36,8 @@ tool_exec <- function(in_params, out_params) {
   
   # Install needed packages
   message("Installing needed pacakges...")
-  needed_pkgs <- c("dplyr", "tibble", "stringr", "lubridate", "tidyr", "sf", 
+  needed_pkgs <- c("dplyr", "kableExtra", "lubridate", 
+                   "sf", "stringr", "tibble", "tidyr", 
                    "units")
   install_needed_packages(needed_pkgs)
   
@@ -58,7 +60,7 @@ tool_exec <- function(in_params, out_params) {
   age_fixed_summary_tbl      <- in_params[[8]]
   species_summary_tbl        <- in_params[[9]]
   health_summary_tbl         <- in_params[[10]]
-  health_species_summary_tbl <- in_params[[10]]
+  health_summary_species_tbl <- in_params[[11]]
   
   # Code for testing in RStudio
   # library(dplyr)
