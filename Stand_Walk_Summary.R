@@ -20,8 +20,9 @@
 #' @param age_fixed_summary_tbl  .gdb table; A FMG age & fixed plot summary 
 #'                               table.
 #' @param species_summary_tbl    .gdb table; A FMG species summary table.
-#' @param health_summary_tbl     .gdb table; A FMG Health summary By Species
-#'                               table.
+#' @param health_summary_tbl     .gdb table; A FMG Health summary table.
+#' @param health_summary_species_tbl  .gdb table; A FMG Health summary 
+#'                                    by species table.
 #'                               
 #' @details  This tool creates a folder named `reports` in the folder where the 
 #' `stand_summary_tbl` is located. A Stand Walk Summary Report is written into 
