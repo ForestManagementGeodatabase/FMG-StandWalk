@@ -204,6 +204,9 @@ fix_fmg_id <- function(df) {
   if("PL_NUM" %in% colnames(df)) {
     df <- dplyr::mutate(df, PLOT = PL_NUM)
   }
+  if("PID" %in% colnames(df)) {
+    df <- dplyr::mutate(df, PLOT = PID)
+  }
   
   return(df)
 }
